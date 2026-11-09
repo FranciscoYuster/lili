@@ -18,12 +18,6 @@
   Run Claude Code, Codex, and any other coding agent in parallel, each in its own worktree. See all of it on one canvas, know what you hand each agent, and know what it costs.
 </p>
 
-<h3 align="center"><a href="#install"><ins>Run lili</ins></a></h3>
-
-<p align="center">
-  <img src="docs/assets/lili/canvas.png" alt="lili's canvas with six workspaces, each tile showing its agent's last words and current state" width="960" />
-</p>
-
 <p align="center">
   <sub>lili is a fork of <a href="https://github.com/stablyai/orca">Orca</a> (MIT) by <a href="https://koderspa.com">Koder SpA</a>. The name comes from 历历 (<i>lìlì</i>), "every detail, distinctly".</sub>
 </p>
@@ -393,6 +387,16 @@ upstream stays cheap. Branding is applied by a re-runnable script
 (`scripts/rebrand-lili.mjs`), never by hand — which is also why `~/.orca/`,
 `orca://` and `ORCA_*` survive untouched: renaming them would break every merge
 and orphan your saved credentials.
+
+### Contributors
+
+<a href="https://github.com/FranciscoYuster/lili/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=FranciscoYuster/lili&max=100&columns=20" alt="lili contributors" />
+</a>
+
+Upstream's contributors are credited on [Orca's own
+repo](https://github.com/stablyai/orca/graphs/contributors) — this wall is only
+the people who have worked on the fork.
 
 ## Signed Builds
 
