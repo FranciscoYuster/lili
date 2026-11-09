@@ -167,7 +167,9 @@ export default function HarnessPanel(): React.JSX.Element {
             {t('koder.harness.counts', 'Skills {skills} · MCP {mcp} · Lock {lock}')
               .replace('{skills}', String(projectSkills.length))
               .replace('{mcp}', String(data.mcp.length))
-              .replace('{lock}', data.hasLock ? `${lockedCount}/${projectSkills.length}` : '—')}
+              // Why always a fraction: "—" reads as "no data", but zero pinned out of
+              // twenty-six is the most actionable number this panel can show.
+              .replace('{lock}', `${lockedCount}/${projectSkills.length}`)}
           </p>
         </div>
         <button
@@ -250,9 +252,15 @@ export default function HarnessPanel(): React.JSX.Element {
         </p>
       ) : null}
 
-      {/* Why spelled out: "locked" here means declared in the lock, not re-hashed. */}
+      {/* Why spelled out: "locked" here means declared in the lock, not re-hashed.
+          And a missing lockfile has to be named, or 0/26 reads as a failed check. */}
       <p className="border-t border-border/60 px-3 py-1.5 text-[10px] text-muted-foreground/70">
-        {t('koder.harness.footnote', 'El lock se lee declarado; el hash todavía no se recalcula.')}
+        {data.hasLock
+          ? t(
+              'koder.harness.footnote',
+              'El lock se lee declarado; el hash todavía no se recalcula.'
+            )
+          : t('koder.harness.noLock', 'Este proyecto no tiene skills-lock.json: nada está fijado.')}
       </p>
     </div>
   )
