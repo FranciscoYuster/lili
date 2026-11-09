@@ -1,0 +1,39 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!--
+    Lili's mark: a halftone grid resolving from grain into a solid edge.
+    From 历历 (lìlì), "every detail, distinctly" — as in 历历在目, things so clear
+    they stand right before your eyes. Radius and opacity climb left to right,
+    so scattered detail becomes a legible whole. White ink, for the dark chip.
+  -->
+  <g fill="#ffffff">
+    <circle cx="2.6" cy="2.6" r="0.65" opacity="0.45"/>
+    <circle cx="2.6" cy="7.3" r="0.65" opacity="0.45"/>
+    <circle cx="2.6" cy="12" r="0.65" opacity="0.45"/>
+    <circle cx="2.6" cy="16.7" r="0.65" opacity="0.45"/>
+    <circle cx="2.6" cy="21.4" r="0.65" opacity="0.45"/>
+
+    <circle cx="7.3" cy="2.6" r="1" opacity="0.5875"/>
+    <circle cx="7.3" cy="7.3" r="1" opacity="0.5875"/>
+    <circle cx="7.3" cy="12" r="1" opacity="0.5875"/>
+    <circle cx="7.3" cy="16.7" r="1" opacity="0.5875"/>
+    <circle cx="7.3" cy="21.4" r="1" opacity="0.5875"/>
+
+    <circle cx="12" cy="2.6" r="1.4" opacity="0.725"/>
+    <circle cx="12" cy="7.3" r="1.4" opacity="0.725"/>
+    <circle cx="12" cy="12" r="1.4" opacity="0.725"/>
+    <circle cx="12" cy="16.7" r="1.4" opacity="0.725"/>
+    <circle cx="12" cy="21.4" r="1.4" opacity="0.725"/>
+
+    <circle cx="16.7" cy="2.6" r="1.8" opacity="0.8625"/>
+    <circle cx="16.7" cy="7.3" r="1.8" opacity="0.8625"/>
+    <circle cx="16.7" cy="12" r="1.8" opacity="0.8625"/>
+    <circle cx="16.7" cy="16.7" r="1.8" opacity="0.8625"/>
+    <circle cx="16.7" cy="21.4" r="1.8" opacity="0.8625"/>
+
+    <circle cx="21.4" cy="2.6" r="2" opacity="1"/>
+    <circle cx="21.4" cy="7.3" r="2" opacity="1"/>
+    <circle cx="21.4" cy="12" r="2" opacity="1"/>
+    <circle cx="21.4" cy="16.7" r="2" opacity="1"/>
+    <circle cx="21.4" cy="21.4" r="2" opacity="1"/>
+  </g>
+</svg>

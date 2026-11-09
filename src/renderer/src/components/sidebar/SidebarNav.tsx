@@ -1,5 +1,13 @@
 import React from 'react'
-import { BookOpen, CalendarClock, EyeOff, Files, Search, Smartphone } from 'lucide-react'
+import {
+  BookOpen,
+  CalendarClock,
+  EyeOff,
+  Files,
+  LayoutGrid,
+  Search,
+  Smartphone
+} from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useAppStore } from '@/store'
 import { cn } from '@/lib/utils'
@@ -55,6 +63,7 @@ const SidebarNav = React.memo(function SidebarNav() {
   const worktreePaletteShortcutCombos = useShortcutKeyComboDetails('worktree.palette')
   const openAutomationsPage = useAppStore((s) => s.openAutomationsPage)
   const openMobilePage = useAppStore((s) => s.openMobilePage)
+  const openCanvasPage = useAppStore((s) => s.openCanvasPage)
   const openArtifactsPage = useAppStore((s) => s.openArtifactsPage)
   const openSkillsPage = useAppStore((s) => s.openSkillsPage)
   const openModal = useAppStore((s) => s.openModal)
@@ -67,6 +76,7 @@ const SidebarNav = React.memo(function SidebarNav() {
   const showSkillsButton = useAppStore((s) => shouldShowSkillsButton(s.settings))
   const automationsActive = activeView === 'automations'
   const mobileActive = activeView === 'mobile'
+  const canvasActive = activeView === 'canvas'
   const artifactsActive = activeView === 'artifacts'
   const skillsActive = activeView === 'skills'
   const mobileOnboardingBadge = useMobileSidebarOnboardingBadge(showMobileButton)
@@ -281,6 +291,23 @@ const SidebarNav = React.memo(function SidebarNav() {
           <HideSidebarMenu onHide={hideMobileButton} />
         </ContextMenu>
       ) : null}
+      <button
+        type="button"
+        onClick={openCanvasPage}
+        aria-current={canvasActive ? 'page' : undefined}
+        className={cn(
+          'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-[13px] font-medium tracking-tight transition-colors',
+          canvasActive
+            ? 'bg-worktree-sidebar-accent text-worktree-sidebar-accent-foreground'
+            : 'text-worktree-sidebar-foreground/60 hover:bg-worktree-sidebar-foreground/8'
+        )}
+      >
+        <LayoutGrid
+          className={cn('size-4 shrink-0', !canvasActive && 'text-worktree-sidebar-foreground/30')}
+          strokeWidth={canvasActive ? 2.25 : 1.75}
+        />
+        <span className="flex-1">{t('koder.sidebar.canvas', 'Canvas')}</span>
+      </button>
     </div>
   )
 })

@@ -1,6 +1,7 @@
 import { pairedRuntimeConnectionFromOffer } from '../../../shared/remote-runtime/pairing/paired-runtime-connection'
 import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
-import { Cable, Loader2, Server, ShieldAlert, Trash2 } from 'lucide-react'
+import { Cable, Loader2, ShieldAlert, Trash2 } from 'lucide-react'
+import { LiliMark } from '@/koder/LiliMark'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -32,7 +33,7 @@ export default function WebConnect({
 }: WebConnectProps): React.JSX.Element {
   const existingEnvironment = readStoredWebRuntimeEnvironment()
   const [name, setName] = useState(
-    (!confirmReplacingSavedServer && existingEnvironment?.name) || 'Orca Server'
+    (!confirmReplacingSavedServer && existingEnvironment?.name) || 'Lili Server'
   )
   const [pairingCode, setPairingCode] = useState(initialPairingInput ?? '')
   const [error, setError] = useState<string | null>(null)
@@ -45,7 +46,7 @@ export default function WebConnect({
   const connect = async (): Promise<void> => {
     setError(null)
     if (!parsedOffer) {
-      setError('Enter a valid Orca pairing URL or pairing code.')
+      setError('Ingresa una URL o un código de emparejamiento de Lili válido.')
       return
     }
     if (parsedOffer.scope === 'mobile') {
@@ -59,7 +60,7 @@ export default function WebConnect({
     }
     if (isMixedContentWebSocket(parsedOffer.endpoint)) {
       setError(
-        'This HTTPS page cannot connect to a plain ws:// Orca server. Open the web client over HTTP or pair with a wss:// endpoint.'
+        'Esta página HTTPS no puede conectarse a un servidor Lili por ws:// sin cifrar. Abre el cliente web por HTTP o emparéjate con un endpoint wss://.'
       )
       return
     }
@@ -127,16 +128,16 @@ export default function WebConnect({
       <div className="flex w-full max-w-[520px] flex-col gap-5 rounded-lg border border-border bg-card p-5 shadow-sm">
         <div className="flex items-start gap-3">
           <div className="flex size-9 shrink-0 items-center justify-center rounded-md border border-border bg-muted">
-            <Server size={18} aria-hidden />
+            <LiliMark size={20} />
           </div>
           <div className="min-w-0">
             <h1 className="text-base font-semibold leading-6">
-              {translate('auto.web.WebConnect.e3bcd082ac', 'Connect to Orca')}
+              {translate('auto.web.WebConnect.e3bcd082ac', 'Conectar con Lili')}
             </h1>
             <p className="mt-1 text-sm leading-5 text-muted-foreground">
               {translate(
                 'auto.web.WebConnect.3affe7de3a',
-                'Paste a pairing URL from an Orca server that this browser can reach.'
+                'Pega la URL de emparejamiento de un servidor Lili que este navegador pueda alcanzar.'
               )}
             </p>
           </div>
@@ -144,7 +145,7 @@ export default function WebConnect({
 
         <div className="grid gap-2">
           <Label htmlFor="web-runtime-name">
-            {translate('auto.web.WebConnect.cb4d287238', 'Server name')}
+            {translate('auto.web.WebConnect.cb4d287238', 'Nombre del servidor')}
           </Label>
           <Input
             id="web-runtime-name"
@@ -156,7 +157,7 @@ export default function WebConnect({
 
         <div className="grid gap-2">
           <Label htmlFor="web-runtime-pairing-code">
-            {translate('auto.web.WebConnect.7a566540de', 'Pairing URL or code')}
+            {translate('auto.web.WebConnect.7a566540de', 'URL o código de emparejamiento')}
           </Label>
           <Input
             id="web-runtime-pairing-code"
@@ -206,12 +207,12 @@ export default function WebConnect({
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-between">
           {replacedEnvironment ? (
             <Button type="button" variant="outline" onClick={onConnected}>
-              {translate('auto.web.WebConnect.keepSavedServer', 'Keep saved server')}
+              {translate('auto.web.WebConnect.keepSavedServer', 'Mantener servidor guardado')}
             </Button>
           ) : (
             <Button type="button" variant="outline" onClick={clear} className="gap-2">
               <Trash2 size={15} aria-hidden />
-              {translate('auto.web.WebConnect.2cf9e5a294', 'Clear saved server')}
+              {translate('auto.web.WebConnect.2cf9e5a294', 'Borrar servidor guardado')}
             </Button>
           )}
           <Button
@@ -225,7 +226,7 @@ export default function WebConnect({
             ) : (
               <Cable size={15} aria-hidden />
             )}
-            {translate('auto.web.WebConnect.b411ec0069', 'Connect')}
+            {translate('auto.web.WebConnect.b411ec0069', 'Conectar')}
           </Button>
         </div>
       </div>

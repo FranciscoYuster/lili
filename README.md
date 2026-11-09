@@ -1,323 +1,179 @@
 <h1 align="center">
-  <a href="https://onOrca.dev"><img src="resources/build/icon.png" alt="Orca" width="64" valign="middle" /></a> Orca
+  <img src="resources/lili-logo.png" alt="" width="84" /><br/>
+  lili
 </h1>
 
 <p align="center">
-  <a href="https://github.com/stablyai/orca"><img src="https://img.shields.io/github/stars/stablyai/orca?style=flat&amp;label=%E2%98%85&amp;color=08C" alt="GitHub stars" /></a>
-  <a href="https://github.com/stablyai/orca/releases"><img src="docs/assets/readme-downloads.svg" alt="Total downloads across all releases" /></a>
   <img src="https://img.shields.io/badge/license-MIT-08C?style=flat" alt="License: MIT" />
-  <a href="https://discord.gg/fzjDKHxv8Q"><img src="https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=white" alt="Join the Orca Discord" /></a>
-  <a href="https://x.com/orca_build"><img src="https://img.shields.io/badge/X-000000?logo=x&logoColor=white" alt="Follow Orca on X" /></a>
+  <img src="https://img.shields.io/badge/fork%20of-Orca-08C?style=flat" alt="A fork of Orca" />
   <img src="https://img.shields.io/badge/macOS%20%7C%20Windows%20%7C%20Linux-4493F8?style=flat-square" alt="Supported platforms: macOS, Windows, and Linux" />
 </p>
 
 <p align="center">
-  <sub><a href="docs/readme/README.zh-CN.md">中文</a> · <a href="docs/readme/README.ja.md">日本語</a> · <a href="docs/readme/README.ko.md">한국어</a> · <a href="docs/readme/README.es.md">Español</a> · <a href="docs/readme/README.fr.md">Français</a> · <a href="docs/readme/README.pt.md">Português</a> · <a href="docs/readme/README.tr.md">Türkçe</a> · <a href="docs/readme/README.ru.md">Русский</a></sub>
-</p>
-
-<p align="center">
-  <strong>The AI Orchestrator for 100x builders.</strong><br/>
-  Run Claude Code, Codex, and any other coding agent in parallel, each in its own worktree. Chat or terminal, on your laptop or in the cloud, with diffs, a browser, and a CLI in one app.
-</p>
-
-<h3 align="center"><a href="https://onorca.dev/download"><ins>Download Orca</ins></a></h3>
-
-<p align="center">
-  <img src="docs/assets/readme-hero.jpg" alt="Orca desktop app with a coordinator agent running worker agents in parallel workspaces, and the Orca mobile app in the corner" width="960" />
-</p>
-
-## Features
-
-<table>
-<tr>
-<td width="50%" valign="middle">
-
-### Orchestrate Agents
-
-Hand a big task to one agent. It splits the work, starts worker agents in their own workspaces, and brings their results back to you.
-
-[Docs →](https://www.onorca.dev/docs/cli/orchestration)
-
-</td>
-<td width="50%">
-  <a href="https://www.onorca.dev/docs/cli/orchestration"><picture><source srcset="docs/assets/readme-features/orchestration.webp" type="image/webp"><img src="docs/assets/readme-features/orchestration.poster.jpg" alt="A coordinator agent splitting a task between two worker agents and reporting their results" width="100%" /></picture></a>
-</td>
-</tr>
-<tr>
-<td width="50%" valign="middle">
-
-### Chat or Terminal
-
-Run any agent in Chat UI or as the raw CLI, and move a conversation between the two without losing context.
-
-[Docs →](https://www.onorca.dev/docs/agents/native-chat)
-
-</td>
-<td width="50%">
-  <a href="https://www.onorca.dev/docs/agents/native-chat"><picture><source srcset="docs/assets/readme-features/chat-or-terminal.webp" type="image/webp"><img src="docs/assets/readme-features/chat-or-terminal.poster.jpg" alt="The same agent conversation in Chat UI and in the terminal, side by side" width="100%" /></picture></a>
-</td>
-</tr>
-<tr>
-<td width="50%" valign="middle">
-
-### Run Anywhere
-
-Pair a Remote Orca Server, work on any SSH host, or give a worktree its own cloud VM. Your agents keep running when your laptop sleeps.
-
-[Docs →](https://www.onorca.dev/docs/ways-to-run)
-
-</td>
-<td width="50%">
-  <a href="https://www.onorca.dev/docs/ways-to-run"><picture><source srcset="docs/assets/readme-features/remote.webp" type="image/webp"><img src="docs/assets/readme-features/remote.poster.jpg" alt="Choosing which machine a new worktree runs on, from this computer to an SSH host or a per-workspace environment" width="100%" /></picture></a>
-</td>
-</tr>
-<tr>
-<td width="50%" valign="middle">
-
-### Mobile App
-
-Pair Orca with the mobile app to get pinged when an agent needs you, reply in chat, and keep work moving on any of your machines when you are away from your desk.
-
-[iOS App Store](https://apps.apple.com/us/app/orca-ide/id6766130217) · [Android APK](https://www.onorca.dev/download/android) · [Docs →](https://www.onorca.dev/docs/mobile)
-
-</td>
-<td width="50%">
-  <a href="https://www.onorca.dev/docs/mobile"><picture><source srcset="docs/assets/readme-features/mobile-companion.webp" type="image/webp"><img src="docs/assets/readme-features/mobile-companion.poster.jpg" alt="The Orca mobile app getting a notification that Claude needs input, opening the session, and replying so the agent opens the PR" width="100%" /></picture></a>
-</td>
-</tr>
-<tr>
-<td width="50%" valign="middle">
-
-### Review AI Output
-
-Review diffs, leave notes on exact changed lines, and send focused feedback back to an agent.
-
-[Docs →](https://www.onorca.dev/docs/review/annotate-ai-diff)
-
-</td>
-<td width="50%">
-  <a href="https://www.onorca.dev/docs/review/annotate-ai-diff"><picture><source srcset="docs/assets/readme-features/annotate-ai-diffs.webp" type="image/webp"><img src="docs/assets/readme-features/annotate-ai-diffs.poster.jpg" alt="A note on a changed diff line sent back to the agent" width="100%" /></picture></a>
-</td>
-</tr>
-<tr>
-<td width="50%" valign="middle">
-
-### Git Integration
-
-Draft commit messages and pull requests from the diff, then send failing checks or PR review comments back to an agent to fix.
-
-[Docs →](https://www.onorca.dev/docs/review/commit-push)
-
-</td>
-<td width="50%">
-  <a href="https://www.onorca.dev/docs/review/commit-push"><picture><source srcset="docs/assets/readme-features/git-integration.webp" type="image/webp"><img src="docs/assets/readme-features/git-integration.poster.jpg" alt="Drafting a commit and pull request, then sending a review comment back to the agent" width="100%" /></picture></a>
-</td>
-</tr>
-<tr>
-<td width="50%" valign="middle">
-
-### Parallel Worktrees
-
-Quickly split tasks into isolated environments, so multiple agents can work side by side without interfering with each other.
-
-[Docs →](https://www.onorca.dev/docs/model/worktrees)
-
-</td>
-<td width="50%">
-  <a href="https://www.onorca.dev/docs/model/worktrees"><picture><source srcset="docs/assets/readme-features/parallel-worktrees.webp" type="image/webp"><img src="docs/assets/readme-features/parallel-worktrees.poster.jpg" alt="Creating a new worktree with its own agent next to other running worktrees" width="100%" /></picture></a>
-</td>
-</tr>
-<tr>
-<td width="50%" valign="middle">
-
-### Design Mode
-
-Click any element in Orca's browser to copy its HTML, styles, and selector, then paste it into your agent's chat.
-
-[Docs →](https://www.onorca.dev/docs/browser/design-mode)
-
-</td>
-<td width="50%">
-  <a href="https://www.onorca.dev/docs/browser/design-mode"><picture><source srcset="docs/assets/readme-features/design-mode.webp" type="image/webp"><img src="docs/assets/readme-features/design-mode.poster.jpg" alt="Picking a button in Orca's browser and sending it to the agent's chat" width="100%" /></picture></a>
-</td>
-</tr>
-<tr>
-<td width="50%" valign="middle">
-
-### GitHub &amp; Linear, Native
-
-See your GitHub and Linear tasks in one place, and start a workspace for each when you're ready to build.
-
-[Docs →](https://www.onorca.dev/docs/review/linear)
-
-</td>
-<td width="50%">
-  <a href="https://www.onorca.dev/docs/review/linear"><picture><source srcset="docs/assets/readme-features/github-linear-tasks.webp" type="image/webp"><img src="docs/assets/readme-features/github-linear-tasks.poster.jpg" alt="GitHub and Linear issues in Orca, with a workspace started from a Linear issue" width="100%" /></picture></a>
-</td>
-</tr>
-<tr>
-<td width="50%" valign="middle">
-
-### Orca CLI
-
-Anything you can do in Orca, your agents can do too: create worktrees, start workers, drive the browser and desktop apps, and schedule automations, all from the command line.
-
-[Docs →](https://www.onorca.dev/docs/cli/overview)
-
-</td>
-<td width="50%">
-  <a href="https://www.onorca.dev/docs/cli/overview"><picture><source srcset="docs/assets/readme-features/orca-cli.webp" type="image/webp"><img src="docs/assets/readme-features/orca-cli.poster.jpg" alt="An agent running orca worktree create to start a worker in a new worktree" width="100%" /></picture></a>
-</td>
-</tr>
-<tr>
-<td width="50%" valign="middle">
-
-### Plugins
-
-Themes, editors, languages, and panels from the community, installed in a click.
-
-[Browse plugins →](https://www.onorca.dev/plugins)
-
-</td>
-<td width="50%">
-  <a href="https://www.onorca.dev/plugins"><picture><source srcset="docs/assets/readme-features/plugins.webp" type="image/webp"><img src="docs/assets/readme-features/plugins.poster.jpg" alt="Installing the Orca Midnight theme from the plugin catalog" width="100%" /></picture></a>
-</td>
-</tr>
-<tr>
-<td width="50%" valign="middle">
-
-### Split Anything
-
-Put agents, terminals, browsers, and diffs side by side in split panes shaped to the task.
-
-[Docs →](https://www.onorca.dev/docs/model/tabs-panes-splits)
-
-</td>
-<td width="50%">
-  <a href="https://www.onorca.dev/docs/model/tabs-panes-splits"><picture><source srcset="docs/assets/readme-features/split-anything.webp" type="image/webp"><img src="docs/assets/readme-features/split-anything.poster.jpg" alt="Dragging tabs into split panes with an agent, browser, terminal, and diff" width="100%" /></picture></a>
-</td>
-</tr>
-</table>
-
-**Also in the box:**
-
-- **[Drag Files to Agents](https://www.onorca.dev/docs/editing/file-explorer)**: drag files from the explorer, or images from your desktop, straight into an agent's prompt.
-- **[Jump Anywhere](https://www.onorca.dev/docs/model/quick-open)**: one shortcut jumps to any workspace or tab across every repo and host.
-- **[Rich Previews](https://www.onorca.dev/docs/editing/viewers)**: open images, PDFs, and Markdown right in the workspace, next to the agent that made them.
-- **[Mobile Emulator](https://www.onorca.dev/docs/cli/overview#mobile-emulator)**: run an iOS Simulator or Android emulator beside your agent, and let it tap, type, and check its own work.
-- **[Dictation](https://www.onorca.dev/docs/settings#voice)**: press a shortcut and talk. Orca types what you say into the agent's prompt or terminal.
-- **[Usage &amp; Accounts](https://www.onorca.dev/docs/agents/usage-tracking)**: see how much of your agent limits you've used and when they reset, and switch accounts without logging out.
-- **[Automations](https://www.onorca.dev/docs/cli/automations)**: schedule prompts to run on any repo: nightly dependency bumps, weekly triage, flaky-test sweeps.
-- **[Computer Use](https://www.onorca.dev/docs/cli/computer-use)**: when there's no CLI or API, agents can see and drive desktop apps and external browsers.
-- **And many, many more**: we ship daily, so this list is perpetually behind. The [changelog](https://github.com/stablyai/orca/releases) is the real feature list.
-
----
-
-## Supported Agents
-
-Works with **any CLI agent** — if it runs in a terminal, it runs in Orca.
-
-<p>
-  <a href="https://docs.anthropic.com/claude/docs/claude-code"><kbd><img src="docs/assets/claude-logo.svg" alt="Claude Code logo" width="16" valign="middle" /> Claude Code</kbd></a> &nbsp;
-  <a href="https://github.com/openai/codex"><kbd><img src="https://www.google.com/s2/favicons?domain=openai.com&sz=64" alt="Codex logo" width="16" valign="middle" /> Codex</kbd></a> &nbsp;
-  <a href="https://x.ai/cli"><kbd><img src="https://www.google.com/s2/favicons?domain=x.ai&sz=64" alt="Grok logo" width="16" valign="middle" /> Grok</kbd></a> &nbsp;
-  <a href="https://cursor.com/cli"><kbd><img src="https://www.google.com/s2/favicons?domain=cursor.com&sz=64" alt="Cursor logo" width="16" valign="middle" /> Cursor</kbd></a> &nbsp;
-  <a href="https://docs.github.com/en/copilot/how-tos/set-up/install-copilot-cli"><kbd><img src="https://www.google.com/s2/favicons?domain=github.com&sz=64" alt="GitHub Copilot logo" width="16" valign="middle" /> GitHub Copilot</kbd></a> &nbsp;
-  <a href="https://dev.meta.ai/docs/muse-code"><kbd><img src="src/shared/agent-icons/muse.png" alt="Muse logo" width="16" valign="middle" /> Muse</kbd></a> &nbsp;
-  <a href="https://deepseek-harness.github.io/deepseek-harness/"><kbd><img src="src/shared/agent-icons/dsh.png" alt="DeepSeek Harness logo" width="16" valign="middle" /> DeepSeek Harness</kbd></a> &nbsp;
-  <a href="https://zcode.z.ai/en/docs"><kbd><img src="src/shared/agent-icons/zcode.png" alt="ZCode logo" width="16" valign="middle" /> ZCode</kbd></a> &nbsp;
-  <a href="https://opencode.ai/docs/cli/"><kbd><img src="https://www.google.com/s2/favicons?domain=opencode.ai&sz=64" alt="OpenCode logo" width="16" valign="middle" /> OpenCode</kbd></a> &nbsp;
-  <a href="https://mimo.xiaomi.com/coder"><kbd><img src="https://www.google.com/s2/favicons?domain=mimo.xiaomi.com&sz=64" alt="MiMo Code logo" width="16" valign="middle" /> MiMo Code</kbd></a> &nbsp;
-  <a href="https://ampcode.com/manual#install"><kbd><img src="https://www.google.com/s2/favicons?domain=ampcode.com&sz=64" alt="Amp logo" width="16" valign="middle" /> Amp</kbd></a> &nbsp;
-  <a href="https://openclaude.gitlawb.com/"><kbd><img src="resources/openclaude-logo.png" alt="OpenClaude logo" width="16" valign="middle" /> OpenClaude</kbd></a> &nbsp;
-  <a href="https://antigravity.google/docs/cli-overview"><kbd><img src="https://www.google.com/s2/favicons?domain=antigravity.google&sz=64" alt="Antigravity logo" width="16" valign="middle" /> Antigravity</kbd></a> &nbsp;
-  <a href="https://pi.dev"><kbd><img src="https://pi.dev/favicon.svg" alt="Pi logo" width="16" valign="middle" /> Pi</kbd></a> &nbsp;
-  <a href="https://omp.sh"><kbd><img src="https://omp.sh/favicon.svg" alt="oh-my-pi logo" width="16" valign="middle" /> oh-my-pi</kbd></a> &nbsp;
-  <a href="https://hermes-agent.nousresearch.com/docs/"><kbd><img src="https://www.google.com/s2/favicons?domain=nousresearch.com&sz=64" alt="Hermes Agent logo" width="16" valign="middle" /> Hermes Agent</kbd></a> &nbsp;
-  <a href="https://devin.ai/cli"><kbd><img src="https://www.google.com/s2/favicons?domain=devin.ai&sz=64" alt="Devin logo" width="16" valign="middle" /> Devin</kbd></a> &nbsp;
-  <a href="https://goose-docs.ai/docs/quickstart/"><kbd><img src="https://www.google.com/s2/favicons?domain=goose-docs.ai&sz=64" alt="Goose logo" width="16" valign="middle" /> Goose</kbd></a> &nbsp;
-  <a href="https://docs.augmentcode.com/cli/overview"><kbd><img src="https://www.google.com/s2/favicons?domain=augmentcode.com&sz=64" alt="Auggie logo" width="16" valign="middle" /> Auggie</kbd></a> &nbsp;
-  <a href="https://github.com/autohandai/code-cli"><kbd><img src="https://www.google.com/s2/favicons?domain=autohand.ai&sz=64" alt="Autohand Code logo" width="16" valign="middle" /> Autohand Code</kbd></a> &nbsp;
-  <a href="https://github.com/charmbracelet/crush"><kbd><img src="https://www.google.com/s2/favicons?domain=charm.sh&sz=64" alt="Charm logo" width="16" valign="middle" /> Charm</kbd></a> &nbsp;
-  <a href="https://docs.cline.bot/cline-cli/overview"><kbd><img src="https://www.google.com/s2/favicons?domain=cline.bot&sz=64" alt="Cline logo" width="16" valign="middle" /> Cline</kbd></a> &nbsp;
-  <a href="https://www.codebuddy.ai/cli"><kbd><img src="https://www.google.com/s2/favicons?domain=codebuddy.ai&sz=64" alt="CodeBuddy logo" width="16" valign="middle" /> CodeBuddy</kbd></a> &nbsp;
-  <a href="https://www.codebuff.com/docs/help/quick-start"><kbd><img src="https://www.google.com/s2/favicons?domain=codebuff.com&sz=64" alt="Codebuff logo" width="16" valign="middle" /> Codebuff</kbd></a> &nbsp;
-  <a href="https://freebuff.com"><kbd><img src="src/shared/agent-icons/freebuff.png" alt="Freebuff logo" width="16" valign="middle" /> Freebuff</kbd></a> &nbsp;
-  <a href="https://commandcode.ai/docs/quickstart"><kbd><img src="https://www.google.com/s2/favicons?domain=commandcode.ai&sz=64" alt="Command Code logo" width="16" valign="middle" /> Command Code</kbd></a> &nbsp;
-  <a href="https://docs.continue.dev/cli/quickstart"><kbd><img src="https://www.google.com/s2/favicons?domain=continue.dev&sz=64" alt="Continue logo" width="16" valign="middle" /> Continue</kbd></a> &nbsp;
-  <a href="https://docs.factory.ai/cli/getting-started/quickstart"><kbd><img src="docs/assets/droid-logo.svg" alt="Droid logo" width="16" valign="middle" /> Droid</kbd></a> &nbsp;
-  <a href="https://kilo.ai/docs/cli"><kbd><img src="https://raw.githubusercontent.com/Kilo-Org/kilocode/main/packages/kilo-vscode/assets/icons/kilo-light.svg" alt="Kilocode logo" width="16" valign="middle" /> Kilocode</kbd></a> &nbsp;
-  <a href="https://www.kimi.com/code/docs/en/kimi-code-cli/getting-started.html"><kbd><img src="https://www.google.com/s2/favicons?domain=moonshot.cn&sz=64" alt="Kimi logo" width="16" valign="middle" /> Kimi</kbd></a> &nbsp;
-  <a href="https://kiro.dev/docs/cli/"><kbd><img src="https://www.google.com/s2/favicons?domain=kiro.dev&sz=64" alt="Kiro logo" width="16" valign="middle" /> Kiro</kbd></a> &nbsp;
-  <a href="https://github.com/mistralai/mistral-vibe"><kbd><img src="https://www.google.com/s2/favicons?domain=mistral.ai&sz=64" alt="Mistral Vibe logo" width="16" valign="middle" /> Mistral Vibe</kbd></a> &nbsp;
-  <a href="https://github.com/QwenLM/qwen-code"><kbd><img src="https://www.google.com/s2/favicons?domain=qwenlm.github.io&sz=64" alt="Qwen Code logo" width="16" valign="middle" /> Qwen Code</kbd></a> &nbsp;
-  <a href="https://support.atlassian.com/rovo/docs/install-and-run-rovo-dev-cli-on-your-device/"><kbd><img src="https://www.google.com/s2/favicons?domain=atlassian.com&sz=64" alt="Rovo Dev logo" width="16" valign="middle" /> Rovo Dev</kbd></a> &nbsp;
-  <kbd>+ any CLI agent</kbd>
+  <strong>El IDE de agentes para una fábrica de software.</strong><br/>
+  Corre Claude Code, Codex y cualquier otro agente en paralelo, ve todo tu trabajo
+  en un solo lienzo, y sabe qué skills, qué MCP y cuántos tokens lleva cada proyecto.
 </p>
 
 ---
 
-## Install
+## Qué es
 
-### Desktop — macOS, Windows, Linux
+**lili** es un fork de [Orca](https://github.com/stablyai/orca) (MIT) hecho por
+[Koder SpA](https://koderspa.com). Orca resuelve bien lo difícil: correr muchos
+agentes en paralelo, cada uno aislado en su propio worktree, con chat o terminal,
+diffs, navegador y CLI en una sola app.
 
-- **[Download from onOrca.dev](https://onorca.dev/download)**
-- Or grab a build directly: [macOS Apple Silicon](https://github.com/stablyai/orca/releases/latest/download/orca-macos-arm64.dmg) · [macOS Intel](https://github.com/stablyai/orca/releases/latest/download/orca-macos-x64.dmg) · [Windows (.exe)](https://github.com/stablyai/orca/releases/latest/download/orca-windows-setup.exe) · [Linux AppImage](https://github.com/stablyai/orca/releases/latest/download/orca-linux.AppImage) · [All builds](https://github.com/stablyai/orca/releases/latest)
+lili agrega lo que falta cuando eso deja de ser un experimento y pasa a ser tu
+operación: **ver todo junto, saber qué le entregas a cada agente, y saber cuánto
+cuesta.**
 
-_Or via a package manager:_
+El nombre viene de 历历 (_lìlì_), «cada detalle, con claridad» — de 历历在目, cosas
+tan nítidas que parecen estar frente a tus ojos.
 
-```bash
-# macOS (Homebrew)
-# Always use the full name; bare `orca` is an unrelated Plotly cask.
-brew install --cask stablyai/orca/orca
-# Upgrade an existing install
-brew upgrade --cask stablyai/orca/orca
+---
 
-# Arch Linux (AUR) — or stably-orca-git to build from source
-yay -S stably-orca-bin
+## Lo que agrega lili
+
+### Canvas
+
+Todos tus espacios de trabajo en un lienzo, no uno a la vez detrás de un clic.
+
+<img src="docs/assets/lili/canvas.png" alt="Canvas de lili con seis espacios de trabajo, cada uno mostrando lo último que dijo su agente y su estado" width="100%" />
+
+Cada tile muestra **lo último que dijo el agente**, no un resumen del workspace, y
+su estado en seis niveles:
+
+| Estado       | Qué significa                                                   |
+| ------------ | --------------------------------------------------------------- |
+| `trabajando` | Hay un turno en curso.                                          |
+| `te espera`  | El agente tiene una pregunta y nada avanza hasta que respondas. |
+| `trancado`   | Se detuvo por un error.                                         |
+| `observando` | Trabajo de fondo que no ocupa al agente.                        |
+| `listo`      | El turno terminó.                                               |
+| `quieto`     | Sin evidencia fresca — no es lo mismo que terminado.            |
+
+Gana el estado más fuerte del espacio: si una pestaña espera permiso y la otra está
+quieta, el tile dice `te espera`, que es la única razón para mirar la pantalla.
+
+Rueda para desplazar, `cmd`+rueda para zoom, arrastrar para mover, doble clic para
+abrir, `0` para volver al centro. Las posiciones se guardan por navegador.
+
+### Harness
+
+Qué le entrega este proyecto a sus agentes, en una pestaña del panel derecho.
+
+<img src="docs/assets/lili/harness.png" alt="Panel Harness mostrando skills con su origen y estado de lock, y los servidores MCP del proyecto" width="420" />
+
+```
+Skills 10 · MCP 3 · Lock 7/10
 ```
 
-### Mobile App — iOS, Android
+Tres estados por skill, y los tres accionables:
 
-Pair with your desktop app to monitor and steer your agents from your phone.
+- **verde** — declarada en `skills-lock.json` y presente en disco
+- **ámbar** — instalada pero sin fijar: puede cambiar sin que te enteres
+- **rojo** — el lock la declara y no está: el harness tiene un hoyo
 
-- **iOS:** [Download on the App Store](https://apps.apple.com/us/app/orca-ide/id6766130217)
-- **Android:** [Download APK](https://www.onorca.dev/download/android) · [Install guide](https://www.onorca.dev/docs/android-apk)
+Abajo, los servidores MCP del proyecto con su transporte y destino, leídos de
+`.mcp.json`, `.cursor/mcp.json`, `.claude.json` o `.claude/mcp.json`.
+
+Las skills del equipo se cuentan aparte: la cuenta de arriba es solo de este
+proyecto.
+
+> El lock se lee **declarado**, no verificado. lili compara nombres contra
+> `skills-lock.json`; todavía no recalcula el hash del contenido. Y «MCP 3» son los
+> servidores configurados, no los conectados — los abre el agente, no lili.
+
+### Economía de tokens
+
+Orca ya atribuye cada turno del log de Claude al worktree que lo originó y le pone
+precio. lili lo saca del panel de estadísticas y lo pone en el tile:
+
+```
+1.2M · US$3.40
+```
+
+El consumo que no cae en ningún espacio de trabajo se muestra aparte, sin
+repartirlo a dedo entre los que sí.
+
+> Es **costo estimado, no facturado**: tarifas publicadas por tokens registrados.
+> Con suscripción no pagas por token, y un modelo sin precio suma tokens y cero
+> dólares. El escaneo lee tus logs locales y está apagado hasta que lo enciendas.
 
 ---
 
-## Community &amp; Support
+## Lo que hereda de Orca
 
-- **Discord:** Join the community on **[Discord](https://discord.gg/fzjDKHxv8Q)**.
-- **Twitter / X:** Follow **[@orca_build](https://x.com/orca_build)** for updates and announcements.
-- **WeChat:** Scan to join an Orca community WeChat group. If one group is full, join another.
-
-  <img src="docs/assets/wechat-qr-group14.jpg" alt="WeChat QR code for the Orca community" width="160" />
-  <img src="docs/assets/wechat-qr-group15.jpg" alt="WeChat QR code for the Orca community" width="160" />
-  <img src="docs/assets/wechat-qr-group16.jpg" alt="WeChat QR code for the Orca community" width="160" />
-
-- **Feedback &amp; Ideas:** We ship fast. Missing something? [Request a new feature](https://github.com/stablyai/orca/issues).
-- **Privacy:** See the [privacy &amp; telemetry docs](https://www.onorca.dev/docs/telemetry) for what anonymous usage data Orca collects and how to opt out.
-- **Show Support:** [Star](https://github.com/stablyai/orca) this repo to follow along with our daily ships.
+- **Orquestación.** Un agente parte el trabajo y lanza agentes trabajadores en sus
+  propios espacios.
+- **Chat o terminal.** El mismo agente en interfaz de chat o como CLI cruda, y
+  mover la conversación entre las dos sin perder contexto.
+- **Worktrees en paralelo.** Cada espacio aislado, o carpetas simples cuando no
+  quieres ramas.
+- **Jira y GitHub nativos.** Issues, comentarios, transiciones, campos ágiles,
+  filtros guardados y conversión ADF↔markdown.
+- **Sesiones indexadas.** Reanuda sesiones de Claude Code que empezaste fuera de la
+  app, en un chat nuevo o en un worktree, o pásalas a otro agente.
+- **Más de 40 agentes.** Claude Code, Codex, Gemini, Cursor, Copilot, Droid, Amp y
+  el resto.
+- **Móvil, revisión de diffs, navegador, plugins y CLI.**
 
 ---
 
-## Developing
+## Instalar
 
-Want to contribute or run locally? See our [CONTRIBUTING.md](.github/CONTRIBUTING.md) guide.
+No hay binarios publicados todavía. Para correrlo desde el código:
 
-<a href="https://github.com/stablyai/orca/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=stablyai/orca&max=500&columns=30" alt="Orca contributors" />
-</a>
+```bash
+git clone https://github.com/FranciscoYuster/lili.git
+cd lili
+pnpm install
+```
 
-<p align="center">
-  <img src="docs/assets/star-history.png" alt="GitHub star history chart for stablyai/orca" width="880" />
-</p>
+**Escritorio:**
 
-## Signed Builds
+```bash
+pnpm dev
+```
 
-Windows code signing sponsored/provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+**Web:**
 
-## License
+```bash
+pnpm dev:web                                            # cliente en :5173
+node config/scripts/development/launch/orca-dev.mjs serve --port 6768   # runtime
+```
 
-Orca is free and open source under the [MIT License](LICENSE).
+Luego abre `http://127.0.0.1:5173/web-index.html`. La ruta `/` es la entrada de
+Electron y necesita el puente de preload; en el navegador usa `web-index.html`.
+
+Requiere Node 22+ y pnpm 12.
+
+---
+
+## Desarrollar
+
+```bash
+pnpm typecheck     # TypeScript en todos los proyectos
+npx oxlint src     # lint
+npx oxfmt --write  # formato
+```
+
+El código propio de lili vive en `src/renderer/src/koder/`. Los cambios sobre
+archivos de Orca están anotados uno por uno en
+[KODER-PATCHES.md](KODER-PATCHES.md), para que traer cambios de upstream siga
+siendo barato. La marca se aplica con un script re-ejecutable
+(`scripts/rebrand-lili.mjs`), no a mano.
+
+---
+
+## Créditos y licencia
+
+lili es un fork de [Orca](https://github.com/stablyai/orca), de Stably AI, bajo
+licencia MIT. Todo el mérito del trabajo base es de sus autores y contribuidores.
+
+lili se distribuye bajo la misma [licencia MIT](LICENSE).
+
+Firma de código en Windows heredada de Orca: patrocinada por
+[SignPath.io](https://signpath.io), certificado de
+[SignPath Foundation](https://signpath.org).

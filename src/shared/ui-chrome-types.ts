@@ -98,6 +98,7 @@ export type RightSidebarTab =
   | 'explorer'
   | 'search'
   | 'vault'
+  | 'harness'
   | 'workspaces'
   | 'pr-checks'
   | 'source-control'
@@ -128,3 +129,4 @@ export type TopLevelView =
   | 'skills'
   | 'artifacts'
   | 'mobile'
+  | 'canvas'

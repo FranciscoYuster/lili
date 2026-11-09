@@ -117,7 +117,7 @@ const devChannelRepo = isHourlyChannel
     : isAdhocChannel
       ? 'orca-adhoc'
       : null
-const appId = 'com.stablyai.orca'
+const appId = 'com.koderspa.lili'
 const featureWallResources = {
   from: 'resources/onboarding/feature-wall',
   to: 'onboarding/feature-wall'
@@ -258,7 +258,7 @@ const ORCA_MAC_TEAM_ID = '6CX3WHS9HZ'
 /** @type {import('electron-builder').Configuration} */
 module.exports = {
   appId,
-  productName: 'Orca',
+  productName: 'Lili',
   protocols: [{ name: 'Orca', schemes: ['orca'] }],
   toolsets: { appimage: '1.0.3' },
   ...(devChannelBuildVersion
@@ -534,7 +534,7 @@ module.exports = {
     }
   },
   win: {
-    executableName: 'Orca',
+    executableName: 'Lili',
     // SignPath signs Windows installers after packaging, so set release publisherName explicitly.
     // Unsigned dev channels omit it or updater signature checks reject dev updates and return to stable.
     // Sign hook signs nothing: it relays transient NSIS uninstaller files to CI SignPath; unset relay env leaves local/dev builds inert.
@@ -678,7 +678,7 @@ module.exports = {
     // Omit mdx because Ubuntu 24.04 maps it to application/x-genesis-32x-rom; claiming it would need a glob override.
     mimeTypes: ['text/markdown', 'text/csv', 'text/tab-separated-values'],
     // Avoid GNOME Orca’s orca package and /usr/bin/orca names.
-    executableName: 'orca-ide',
+    executableName: 'lili-ide',
     // Use icns to generate hicolor sizes; some Linux docks ignore a lone 1024px PNG.
     icon: 'resources/build/icon.icns',
     desktop: {
