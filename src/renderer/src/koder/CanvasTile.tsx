@@ -13,7 +13,7 @@
  */
 
 import { memo } from 'react'
-import { GitPullRequest, Hash } from 'lucide-react'
+import { GitPullRequest, Hash, Pin, PinOff } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { CanvasLiveInfo, CanvasLiveState } from './canvas-tile-live'
 import { liveSummaryLine } from './canvas-tile-live'
@@ -81,23 +81,28 @@ type CanvasTileProps = {
   model: CanvasTileModel
   x: number
   y: number
+  isLocked: boolean
   onOpen: (id: string) => void
   onDragStart: (id: string, event: React.PointerEvent<HTMLDivElement>) => void
+  onToggleLock: (id: string) => void
 }
 
 export const CanvasTile = memo(function CanvasTile({
   model,
   x,
   y,
+  isLocked,
   onOpen,
-  onDragStart
+  onDragStart,
+  onToggleLock
 }: CanvasTileProps) {
   const state = model.live?.state ?? 'idle'
   const cost = formatCostUsd(model.economy?.estimatedCostUsd ?? null)
   return (
     <div
       className={cn(
-        'absolute flex cursor-grab select-none flex-col gap-2 rounded-xl border p-3 shadow-lg transition-colors active:cursor-grabbing',
+        'group absolute flex select-none flex-col gap-2 rounded-xl border p-3 shadow-lg transition-colors',
+        isLocked ? 'cursor-default' : 'cursor-grab active:cursor-grabbing',
         model.isActive
           ? 'border-primary/70 bg-card shadow-primary/10'
           : 'border-border/80 bg-card/95 hover:border-border'
@@ -112,6 +117,7 @@ export const CanvasTile = memo(function CanvasTile({
       onDoubleClick={() => onOpen(model.id)}
       data-testid="canvas-tile"
       data-state={state}
+      data-locked={isLocked ? 'true' : 'false'}
     >
       <div className="flex min-w-0 items-start gap-2">
         {model.isUnread ? (
@@ -164,6 +170,26 @@ export const CanvasTile = memo(function CanvasTile({
           </span>
         ) : null}
         <span className="ml-auto shrink-0 font-mono">{relativeTime(model.lastActivityAt)}</span>
+        <button
+          type="button"
+          // Why stopPropagation on pointer-down: the tile claims that gesture to start
+          // a drag, so without this the pin button would move the tile instead.
+          onPointerDown={(event) => event.stopPropagation()}
+          onClick={(event) => {
+            event.stopPropagation()
+            onToggleLock(model.id)
+          }}
+          className={cn(
+            'shrink-0 rounded p-0.5 transition-opacity hover:text-foreground',
+            // A pin only earns permanent space once it is holding something.
+            isLocked ? 'text-foreground/70 opacity-100' : 'opacity-0 group-hover:opacity-100'
+          )}
+          title={isLocked ? 'Soltar posición' : 'Fijar posición'}
+          aria-label={isLocked ? 'Soltar posición' : 'Fijar posición'}
+          aria-pressed={isLocked}
+        >
+          {isLocked ? <Pin className="size-3" /> : <PinOff className="size-3" />}
+        </button>
       </div>
     </div>
   )

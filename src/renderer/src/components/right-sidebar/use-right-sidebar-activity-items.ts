@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Plug, Files, GitBranch, ListChecks, Workflow, Boxes } from 'lucide-react'
+import { Plug, Files, GitBranch, ListChecks, Workflow, Boxes, DollarSign } from 'lucide-react'
 import { useAppStore } from '@/store'
 import { useRepoById } from '@/store/repos/use-repository-catalog'
 import { isFolderRepo } from '../../../../shared/repo-kind'
@@ -89,6 +89,12 @@ export function useRightSidebarActivityItems({
         id: 'harness',
         icon: Boxes,
         title: translate('auto.components.right.sidebar.index.koderHarness', 'Harness'),
+        shortcut: ''
+      },
+      {
+        id: 'economy',
+        icon: DollarSign,
+        title: translate('auto.components.right.sidebar.index.koderEconomy', 'Economía'),
         shortcut: ''
       },
       {

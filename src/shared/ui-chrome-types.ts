@@ -99,6 +99,7 @@ export type RightSidebarTab =
   | 'search'
   | 'vault'
   | 'harness'
+  | 'economy'
   | 'workspaces'
   | 'pr-checks'
   | 'source-control'

@@ -42,6 +42,7 @@ export const STATIC_RIGHT_SIDEBAR_TABS = [
   'search',
   'vault',
   'harness',
+  'economy',
   'workspaces',
   'pr-checks',
   'source-control',

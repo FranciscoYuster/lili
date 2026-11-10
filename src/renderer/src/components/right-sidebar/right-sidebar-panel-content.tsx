@@ -16,6 +16,7 @@ const FolderWorkspacePrChecksPanel = lazy(
 )
 const PluginPanel = lazy(() => import('./plugin-panels/PluginPanel'))
 const HarnessPanel = lazy(() => import('../../koder/harness/HarnessPanel'))
+const EconomyPanel = lazy(() => import('../../koder/economy/EconomyPanel'))
 
 type RightSidebarPanelContentProps = {
   effectiveTab: ActiveRightSidebarTab
@@ -50,6 +51,7 @@ export function RightSidebarPanelContent({
         )}
         {effectiveTab === 'vault' && <AiVaultSidebarPanel />}
         {effectiveTab === 'harness' && <HarnessPanel />}
+        {effectiveTab === 'economy' && <EconomyPanel />}
         {effectiveTab === 'workspaces' && <FolderWorkspaceWorktreesPanel />}
         {effectiveTab === 'pr-checks' && (
           <FolderWorkspacePrChecksPanel

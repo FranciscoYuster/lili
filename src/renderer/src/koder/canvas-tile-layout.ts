@@ -18,7 +18,7 @@ const COLUMNS = 3
 const ORIGIN_X = 64
 const ORIGIN_Y = 64
 
-export type TilePosition = { x: number; y: number }
+export type TilePosition = { x: number; y: number; locked?: boolean }
 export type TileLayout = Record<string, TilePosition>
 
 /** Reading-order grid, so a first visit looks deliberate rather than stacked. */
@@ -46,11 +46,11 @@ export function readLayout(): TileLayout {
       if (typeof value !== 'object' || value === null) {
         continue
       }
-      const { x, y } = value as Partial<TilePosition>
+      const { x, y, locked } = value as Partial<TilePosition>
       // Why: a corrupt or half-written entry must not place a tile at NaN,
       // which renders it unreachable with no way to drag it back.
       if (Number.isFinite(x) && Number.isFinite(y)) {
-        out[id] = { x: x as number, y: y as number }
+        out[id] = { x: x as number, y: y as number, ...(locked === true ? { locked: true } : {}) }
       }
     }
     return out
@@ -65,4 +65,30 @@ export function writeLayout(layout: TileLayout): void {
   } catch {
     // Storage is a convenience here; losing it costs the arrangement, nothing else.
   }
+}
+
+/**
+ * A pinned tile refuses the drag gesture.
+ *
+ * Why this exists: a tile you placed deliberately — the one workspace you keep
+ * glancing at — is the one a stray pointer-down moves. Position is the only
+ * thing on this canvas with no undo, so the pin is cheaper than the mistake.
+ */
+export function isTileLocked(layout: TileLayout, id: string): boolean {
+  return layout[id]?.locked === true
+}
+
+/**
+ * Pinning a tile that never moved has to write its current place, not leave it
+ * to the default grid: the grid is index-based, so adding a workspace would
+ * otherwise slide a pinned tile somewhere else.
+ */
+export function toggleTileLock(layout: TileLayout, id: string, fallback: TilePosition): TileLayout {
+  const current = layout[id] ?? fallback
+  const next: TileLayout = {
+    ...layout,
+    [id]: { x: current.x, y: current.y, ...(current.locked === true ? {} : { locked: true }) }
+  }
+  writeLayout(next)
+  return next
 }

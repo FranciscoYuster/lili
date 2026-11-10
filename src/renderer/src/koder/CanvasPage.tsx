@@ -17,7 +17,14 @@ import { useAllWorktrees } from '@/store/slices/worktrees/listing/use-worktree-c
 import { useTranslate } from '@/i18n/use-translate'
 import { LiliMark } from './LiliMark'
 import { CanvasTile, type CanvasTileModel } from './CanvasTile'
-import { defaultPosition, readLayout, writeLayout, type TileLayout } from './canvas-tile-layout'
+import {
+  defaultPosition,
+  isTileLocked,
+  readLayout,
+  toggleTileLock,
+  writeLayout,
+  type TileLayout
+} from './canvas-tile-layout'
 import { buildLiveByWorktree } from './canvas-tile-live'
 import { buildEconomyByWorktree, formatTokens, unattributedSpend } from './canvas-tile-economy'
 
@@ -133,6 +140,11 @@ export default function CanvasPage(): React.JSX.Element {
 
   const startTileDrag = useCallback(
     (id: string, event: React.PointerEvent<HTMLDivElement>) => {
+      if (isTileLocked(layout, id)) {
+        // A pinned tile swallows the gesture rather than passing it to the
+        // surface: panning from a tile you deliberately placed reads as a bug.
+        return
+      }
       const index = tiles.findIndex((tile) => tile.id === id)
       const position = positionFor(id, index === -1 ? 0 : index)
       const { scale } = viewportRef.current
@@ -142,6 +154,15 @@ export default function CanvasPage(): React.JSX.Element {
         offsetY: event.clientY / scale - position.y
       }
       containerRef.current?.setPointerCapture(event.pointerId)
+    },
+    [tiles, positionFor, layout]
+  )
+
+  const toggleLock = useCallback(
+    (id: string) => {
+      const index = tiles.findIndex((tile) => tile.id === id)
+      const fallback = positionFor(id, index === -1 ? 0 : index)
+      setLayout((current) => toggleTileLock(current, id, fallback))
     },
     [tiles, positionFor]
   )
@@ -273,8 +294,10 @@ export default function CanvasPage(): React.JSX.Element {
               model={tile}
               x={position.x}
               y={position.y}
+              isLocked={position.locked === true}
               onOpen={openWorkspace}
               onDragStart={startTileDrag}
+              onToggleLock={toggleLock}
             />
           )
         })}
@@ -316,7 +339,7 @@ export default function CanvasPage(): React.JSX.Element {
       <p className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 font-mono text-[11px] text-muted-foreground/60">
         {t(
           'koder.canvas.hints',
-          'rueda: desplazar · cmd+rueda: zoom · arrastrar tile: mover · doble clic: abrir · 0: centrar'
+          'rueda: desplazar · cmd+rueda: zoom · arrastrar: mover · pin: fijar · doble clic: abrir · 0: centrar'
         )}
       </p>
     </div>

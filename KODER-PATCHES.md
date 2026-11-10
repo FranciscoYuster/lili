@@ -10,27 +10,31 @@ After `scripts/sync-upstream.sh`, re-check each row.
 
 ## Touchpoints in upstream files
 
-| File                                                                            | What changed                                                                     | Why                                                                               |
-| ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `config/electron-builder.config.cjs`                                            | `appId`, `productName`, `executableName` (x2)                                    | Ship as Lili, not Orca                                                            |
-| `src/renderer/index.html`                                                       | `<title>`                                                                        | Window title                                                                      |
-| `src/renderer/web-index.html`                                                   | `<title>`                                                                        | Browser tab title                                                                 |
-| `src/main/window/createMainWindow.ts`                                           | default window title                                                             | Window title                                                                      |
-| `src/main/window/main-window-close-lifecycle.ts`                                | dialog title                                                                     | Close dialog                                                                      |
-| `src/renderer/src/web/WebConnect.tsx`                                           | mark + Spanish copy, dropped `Server` icon import                                | Pairing screen is the first thing a user sees                                     |
-| `src/shared/ui-chrome-types.ts`                                                 | `'canvas'` in `TopLevelView`                                                     | Canvas view                                                                       |
-| `src/shared/top-level-view.ts`                                                  | `canvas: true` in the lookup                                                     | Canvas view                                                                       |
-| `src/shared/rpc-contract/client-ui-params.ts`                                   | `'canvas'` in `TopLevelViewSchema`                                               | Canvas view — a parity check fails the build without it                           |
-| `src/renderer/src/store/slices/ui/ui-slice-contract-core.ts`                    | `UiViewHistory`, `previousViewBeforeCanvas`, `openCanvasPage`, `closeCanvasPage` | Canvas view                                                                       |
-| `src/renderer/src/store/slices/ui/ui-slice-task-actions.ts`                     | initial `previousViewBeforeCanvas`                                               | Canvas view                                                                       |
-| `src/renderer/src/store/slices/ui/ui-slice-view-actions.ts`                     | open/close implementations                                                       | Canvas view                                                                       |
-| `src/renderer/src/components/sidebar/SidebarNav.tsx`                            | Canvas nav button under Lili Mobile                                              | Canvas view                                                                       |
-| `src/renderer/src/app-shell/AppWorkspaceShell.tsx`                              | lazy import + render on `activeView === 'canvas'`                                | Canvas view                                                                       |
-| `src/shared/ui-chrome-types.ts`                                                 | `'harness'` in `RightSidebarTab`                                                 | Harness panel                                                                     |
-| `src/shared/rpc-contract/client-ui-params.ts`                                   | `'harness'` in `STATIC_RIGHT_SIDEBAR_TABS`                                       | Harness panel                                                                     |
-| `src/renderer/src/store/slices/right-sidebar/right-sidebar-route.ts`            | `'harness'` in the persisted-route allowlist                                     | Harness panel — without it the tab silently falls back to Explorer on every click |
-| `src/renderer/src/components/right-sidebar/use-right-sidebar-activity-items.ts` | `Boxes` import + Harness item after `vault`                                      | Harness panel                                                                     |
-| `src/renderer/src/components/right-sidebar/right-sidebar-panel-content.tsx`     | lazy import + render on `effectiveTab === 'harness'`                             | Harness panel                                                                     |
+| File                                                                            | What changed                                                                                  | Why                                                                             |
+| ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `config/electron-builder.config.cjs`                                            | `appId`, `productName`, `executableName` (x2)                                                 | Ship as Lili, not Orca                                                          |
+| `src/renderer/index.html`                                                       | `<title>`                                                                                     | Window title                                                                    |
+| `src/renderer/web-index.html`                                                   | `<title>`                                                                                     | Browser tab title                                                               |
+| `src/main/window/createMainWindow.ts`                                           | default window title                                                                          | Window title                                                                    |
+| `src/main/window/main-window-close-lifecycle.ts`                                | dialog title                                                                                  | Close dialog                                                                    |
+| `src/renderer/src/web/WebConnect.tsx`                                           | mark + Spanish copy, dropped `Server` icon import                                             | Pairing screen is the first thing a user sees                                   |
+| `src/shared/ui-chrome-types.ts`                                                 | `'canvas'` in `TopLevelView`                                                                  | Canvas view                                                                     |
+| `src/shared/top-level-view.ts`                                                  | `canvas: true` in the lookup                                                                  | Canvas view                                                                     |
+| `src/shared/rpc-contract/client-ui-params.ts`                                   | `'canvas'` in `TopLevelViewSchema`                                                            | Canvas view — a parity check fails the build without it                         |
+| `src/renderer/src/store/slices/ui/ui-slice-contract-core.ts`                    | `UiViewHistory`, `previousViewBeforeCanvas`, `openCanvasPage`, `closeCanvasPage`              | Canvas view                                                                     |
+| `src/renderer/src/store/slices/ui/ui-slice-task-actions.ts`                     | initial `previousViewBeforeCanvas`                                                            | Canvas view                                                                     |
+| `src/renderer/src/store/slices/ui/ui-slice-view-actions.ts`                     | open/close implementations                                                                    | Canvas view                                                                     |
+| `src/renderer/src/components/sidebar/SidebarNav.tsx`                            | Canvas nav button under Lili Mobile                                                           | Canvas view                                                                     |
+| `src/renderer/src/app-shell/AppWorkspaceShell.tsx`                              | lazy import + render on `activeView === 'canvas'`                                             | Canvas view                                                                     |
+| `src/shared/ui-chrome-types.ts`                                                 | `'harness'` and `'economy'` in `RightSidebarTab`                                              | Harness panel, Economy panel                                                    |
+| `src/shared/rpc-contract/client-ui-params.ts`                                   | `'harness'` and `'economy'` in `STATIC_RIGHT_SIDEBAR_TABS`                                    | Harness panel, Economy panel                                                    |
+| `src/renderer/src/store/slices/right-sidebar/right-sidebar-route.ts`            | `'harness'` and `'economy'` in the persisted-route allowlist                                  | Both panels — without it the tab silently falls back to Explorer on every click |
+| `src/renderer/src/components/right-sidebar/use-right-sidebar-activity-items.ts` | `Boxes` import + Harness item after `vault`; `DollarSign` import + Economy item after Harness | Harness panel, Economy panel                                                    |
+| `src/renderer/src/components/right-sidebar/right-sidebar-panel-content.tsx`     | lazy import + render on `effectiveTab === 'harness'` / `'economy'`                            | Harness panel, Economy panel                                                    |
+
+The Economy (`$`) panel added **no new touchpoints**: a second right-sidebar tab
+rides the same five seams as Harness, one extra line each. That is the argument
+for putting the next panel there too rather than in the main area.
 
 **18 touchpoints — over the target of 10.** Seven are the Canvas view and five the
 Harness panel,
@@ -72,6 +76,7 @@ keep Orca's names even though the product is called Lili:
 
 - `src/renderer/src/koder/` — `LiliMark.tsx`, `CanvasPage.tsx`, `CanvasTile.tsx`,
   `canvas-tile-layout.ts`, `canvas-tile-live.ts`, `canvas-tile-economy.ts`,
-  `harness/HarnessPanel.tsx`, `harness/harness-lock.ts`
+  `harness/HarnessPanel.tsx`, `harness/harness-lock.ts`,
+  `economy/EconomyPanel.tsx`, `economy/economy-rows.ts`
 - `scripts/rebrand-lili.mjs`
 - `resources/lili-logo.svg`
