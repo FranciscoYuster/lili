@@ -18,6 +18,7 @@ import { useAppStore } from '@/store'
 import { useTranslate } from '@/i18n/use-translate'
 import { cn } from '@/lib/utils'
 import { formatCostUsd, formatTokens } from '../canvas-tile-economy'
+import { Kpi, Row, Section, Segment } from './economy-panel-parts'
 import {
   cacheReuseRate,
   economyByAgent,
@@ -48,6 +49,9 @@ export default function EconomyPanel(): React.JSX.Element {
   const t = useTranslate()
   const [scope, setScope] = useState<PanelScope>('workspace')
   const [refreshing, setRefreshing] = useState(false)
+  // Observed, not sniffed: "the first read finished" is what separates a panel
+  // still loading from one whose host cannot answer at all.
+  const [firstReadSettled, setFirstReadSettled] = useState(false)
 
   const activeWorktreeId = useAppStore((state) => state.activeWorktreeId)
   const activeWorktree = useAppStore((state) =>
@@ -148,12 +152,22 @@ export default function EconomyPanel(): React.JSX.Element {
   // never qualifies to render, and the dashboard shows a confident set of zeros
   // that look like a measured result rather than an unread one.
   useEffect(() => {
+    let cancelled = false
     // Each fetch reads its own opt-in flag first and returns before scanning when
     // it is off, so calling all four unconditionally costs nothing when disabled.
-    void fetchClaude?.()
-    void fetchCodex?.()
-    void fetchOpenCode?.()
-    void fetchMuse?.()
+    void Promise.allSettled([
+      fetchClaude?.(),
+      fetchCodex?.(),
+      fetchOpenCode?.(),
+      fetchMuse?.()
+    ]).then(() => {
+      if (!cancelled) {
+        setFirstReadSettled(true)
+      }
+    })
+    return () => {
+      cancelled = true
+    }
   }, [fetchClaude, fetchCodex, fetchOpenCode, fetchMuse])
 
   const enableAll = useCallback(() => {
@@ -165,10 +179,26 @@ export default function EconomyPanel(): React.JSX.Element {
 
   // Zeros and "not read yet" are different claims, and only one of them is true
   // before the first fetch lands. Saying nothing beats saying US$0,00.
-  if (!scanStateKnown) {
+  if (!scanStateKnown && !firstReadSettled) {
     return (
       <div className="flex flex-1 items-center justify-center p-6 text-center text-sm text-muted-foreground">
         {t('koder.economy.reading', 'Leyendo el consumo de los agentes…')}
+      </div>
+    )
+  }
+
+  // Every provider read came back empty. Upstream resolves these APIs to
+  // undefined in a paired web client — the scanners walk the desktop's own
+  // filesystem — so the honest answer is where to open this, not a spinner.
+  if (!scanStateKnown) {
+    return (
+      <div className="flex flex-1 flex-col items-center justify-center gap-2 p-6 text-center">
+        <p className="text-sm text-muted-foreground">
+          {t(
+            'koder.economy.desktopOnly',
+            'Este cliente no mide tokens. Los escáneres leen los registros locales de los agentes, así que la economía solo existe en la app de escritorio.'
+          )}
+        </p>
       </div>
     )
   }
@@ -341,104 +371,4 @@ function agentCost(totals: EconomyTotals, t: ReturnType<typeof useTranslate>): s
 
 function formatRate(rate: number | null): string {
   return rate === null ? '—' : `${Math.round(rate * 100)}%`
-}
-
-function Segment({
-  active,
-  label,
-  onClick
-}: {
-  active: boolean
-  label: string
-  onClick: () => void
-}): React.JSX.Element {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={active}
-      className={cn(
-        'rounded px-1.5 py-0.5 text-[11px] transition-colors',
-        active ? 'bg-muted text-foreground' : 'text-muted-foreground hover:text-foreground'
-      )}
-    >
-      {label}
-    </button>
-  )
-}
-
-function Kpi({ label, value }: { label: string; value: string }): React.JSX.Element {
-  return (
-    <div className="rounded-lg border border-border/60 bg-card/60 px-2.5 py-2">
-      <p className="truncate text-[10px] tracking-wide text-muted-foreground/70 uppercase">
-        {label}
-      </p>
-      <p className="truncate font-mono text-[15px] leading-6 text-foreground">{value}</p>
-    </div>
-  )
-}
-
-function Row({
-  name,
-  detail,
-  value,
-  onClick,
-  isActive
-}: {
-  name: string
-  detail: string
-  value: string
-  onClick?: () => void
-  isActive?: boolean
-}): React.JSX.Element {
-  const content = (
-    <>
-      <div className="min-w-0 flex-1">
-        <p
-          className={cn(
-            'truncate text-[12px]',
-            isActive ? 'text-foreground' : 'text-foreground/90'
-          )}
-        >
-          {name}
-        </p>
-        <p className="truncate font-mono text-[10px] text-muted-foreground">{detail}</p>
-      </div>
-      <span className="shrink-0 font-mono text-[11px] text-muted-foreground">{value}</span>
-    </>
-  )
-  if (!onClick) {
-    return <div className="flex items-center gap-2 px-3 py-1.5">{content}</div>
-  }
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={cn(
-        'flex w-full items-center gap-2 px-3 py-1.5 text-left transition-colors hover:bg-muted/40',
-        isActive && 'bg-muted/30'
-      )}
-    >
-      {content}
-    </button>
-  )
-}
-
-function Section({
-  label,
-  count,
-  children
-}: {
-  label: string
-  count: number
-  children: React.ReactNode
-}): React.JSX.Element {
-  return (
-    <section className="py-1">
-      <p className="px-3 py-1 text-[10px] font-medium tracking-wide text-muted-foreground/70 uppercase">
-        {label} · {count}
-      </p>
-      {children}
-    </section>
-  )
 }

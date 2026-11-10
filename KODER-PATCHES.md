@@ -90,7 +90,8 @@ keep Orca's names even though the product is called Lili:
 - `src/renderer/src/koder/` — `LiliMark.tsx`, `CanvasPage.tsx`, `CanvasTile.tsx`,
   `canvas-tile-layout.ts`, `canvas-tile-live.ts`, `canvas-tile-economy.ts`,
   `harness/HarnessPanel.tsx`, `harness/harness-lock.ts`,
-  `economy/EconomyPanel.tsx`, `economy/economy-rows.ts`,
+  `economy/EconomyPanel.tsx`, `economy/economy-panel-parts.tsx`,
+  `economy/economy-rows.ts`,
   `jira/JiraAssigneeFilter.tsx`, `jira/assignee-filter.ts`,
   `jira/JiraTimelineView.tsx`, `jira/jira-timeline-model.ts`,
   `jira/JiraPanel.tsx`, `jira/JiraTabIcon.tsx`, `jira/project-issues.ts`
