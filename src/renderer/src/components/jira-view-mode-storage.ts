@@ -1,11 +1,16 @@
-export type JiraViewMode = 'list' | 'board'
+export type JiraViewMode = 'list' | 'board' | 'timeline'
 
 // Device-local, like the Jira list columns, rather than synced through ui.set.
 const STORAGE_KEY = 'orca.jira.view-mode.v1'
 
+function isNonDefaultMode(value: string | null): value is 'board' | 'timeline' {
+  return value === 'board' || value === 'timeline'
+}
+
 export function loadJiraViewMode(): JiraViewMode {
   try {
-    return localStorage.getItem(STORAGE_KEY) === 'board' ? 'board' : 'list'
+    const stored = localStorage.getItem(STORAGE_KEY)
+    return isNonDefaultMode(stored) ? stored : 'list'
   } catch {
     return 'list'
   }
@@ -14,8 +19,8 @@ export function loadJiraViewMode(): JiraViewMode {
 export function saveJiraViewMode(mode: JiraViewMode): void {
   try {
     // Storing only the non-default keeps a future default change from being pinned by old devices.
-    if (mode === 'board') {
-      localStorage.setItem(STORAGE_KEY, 'board')
+    if (isNonDefaultMode(mode)) {
+      localStorage.setItem(STORAGE_KEY, mode)
     } else {
       localStorage.removeItem(STORAGE_KEY)
     }

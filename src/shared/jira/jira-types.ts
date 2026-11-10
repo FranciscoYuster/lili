@@ -122,6 +122,10 @@ export type JiraIssue = {
   /** Parent issue (epic for stories, parent story for subtasks). */
   parent?: { key: string; title: string; issueTypeName?: string }
   sprint?: string
+  /** Jira's own "Start date" custom field, when the site defines one. */
+  startDate?: string
+  /** Standard `duedate`. Dates are site-local calendar days, not instants. */
+  dueDate?: string
   storyPoints?: number
   originalEstimateSeconds?: number
   remainingEstimateSeconds?: number

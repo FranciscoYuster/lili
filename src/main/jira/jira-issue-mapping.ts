@@ -31,6 +31,7 @@ export const ISSUE_FIELDS = [
   'labels',
   'created',
   'updated',
+  'duedate',
   'parent',
   'timeoriginalestimate',
   'timeestimate'
@@ -189,6 +190,8 @@ export function toBodyText(site: JiraSite, text: string): unknown {
 export type JiraAgileFieldIds = {
   sprint?: string
   storyPoints?: string[]
+  /** Jira Cloud has no system start date; every site names its own custom field. */
+  startDate?: string
 }
 
 function mapParent(value: unknown): JiraIssue['parent'] {
@@ -252,6 +255,10 @@ export function mapJiraIssue(
     priority: mapPriority(fields.priority),
     parent: mapParent(fields.parent),
     sprint: agileFields.sprint ? mapSprint(fields[agileFields.sprint]) : undefined,
+    startDate: agileFields.startDate
+      ? asString(fields[agileFields.startDate]) || undefined
+      : undefined,
+    dueDate: asString(fields.duedate) || undefined,
     storyPoints:
       agileFields.storyPoints
         ?.map((id) => asFiniteNumber(fields[id]))

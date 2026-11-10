@@ -8,6 +8,7 @@ import { settleJiraSummaryRead, withJiraDeadline } from './jira-read-failure'
 const SPRINT_FIELD_TYPE = 'com.pyxis.greenhopper.jira:gh-sprint'
 const STORY_POINTS_TYPE = 'com.pyxis.greenhopper.jira:jsw-story-points'
 const NUMBER_FIELD_TYPE = 'com.atlassian.jira.plugin.system.customfieldtypes:float'
+const DATE_FIELD_TYPE = 'com.atlassian.jira.plugin.system.customfieldtypes:datepicker'
 const cache = new Map<string, Promise<JiraAgileFieldIds>>()
 const discoveryExpiresAt = new Map<string, number>()
 const FAILED_DISCOVERY_RETRY_MS = 60_000
@@ -23,6 +24,15 @@ export function pickAgileFieldIds(fields: readonly JiraRecord[]): JiraAgileField
     }
     if (!ids.sprint && custom === SPRINT_FIELD_TYPE) {
       ids.sprint = id
+    }
+    // Why name-matched and anchored: a site can hold several date pickers, and a
+    // loose test would bind "Start date of review" to the timeline's start.
+    if (
+      !ids.startDate &&
+      custom === DATE_FIELD_TYPE &&
+      /^start\s*date$/i.test(asString(field.name).trim())
+    ) {
+      ids.startDate = id
     }
     if (
       custom === STORY_POINTS_TYPE ||
@@ -105,5 +115,9 @@ export function getAgileFieldIds(
 }
 
 export function agileFieldIdList(ids: JiraAgileFieldIds): string[] {
-  return [...(ids.sprint ? [ids.sprint] : []), ...(ids.storyPoints ?? [])]
+  return [
+    ...(ids.sprint ? [ids.sprint] : []),
+    ...(ids.storyPoints ?? []),
+    ...(ids.startDate ? [ids.startDate] : [])
+  ]
 }

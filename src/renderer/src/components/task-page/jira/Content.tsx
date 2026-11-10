@@ -22,6 +22,14 @@ import {
   runtimeTargetEnvironmentId
 } from '@/runtime/rpc/targets/runtime-client-target'
 import { getEnvironmentRuntimeContextKey } from '@/lib/provider-runtime-context'
+import { useCallback, useMemo, useState } from 'react'
+import { JiraAssigneeFilter } from '@/koder/jira/JiraAssigneeFilter'
+import { JiraTimelineView } from '@/koder/jira/JiraTimelineView'
+import {
+  buildAssigneeOptions,
+  filterIssuesByAssignee,
+  pruneAssigneeSelection
+} from '@/koder/jira/assignee-filter'
 export function TaskPageJiraContent({
   model
 }: {
@@ -67,6 +75,37 @@ export function TaskPageJiraContent({
     accountBackedTaskSourceHostId,
     setJiraRefreshNonce
   } = model
+  const [selectedAssignees, setSelectedAssignees] = useState<ReadonlySet<string>>(
+    () => new Set<string>()
+  )
+  const unassignedLabel = translate('jira.assignee.unassigned', 'Sin asignar')
+  // The roster comes from the sorted list so that the counts match what a click
+  // will leave on screen, including when a search has already narrowed it.
+  const assigneeOptions = useMemo(
+    () => buildAssigneeOptions(sortedJiraIssues, unassignedLabel),
+    [sortedJiraIssues, unassignedLabel]
+  )
+  // A selection that survived a project or filter change would silently empty the
+  // list with no avatar left on screen to explain it.
+  const liveAssigneeSelection = useMemo(
+    () => pruneAssigneeSelection(selectedAssignees, assigneeOptions),
+    [selectedAssignees, assigneeOptions]
+  )
+  const visibleJiraIssues = useMemo(
+    () => filterIssuesByAssignee(sortedJiraIssues, liveAssigneeSelection),
+    [sortedJiraIssues, liveAssigneeSelection]
+  )
+  const toggleAssignee = useCallback((id: string) => {
+    setSelectedAssignees((current) => {
+      const next = new Set(current)
+      if (!next.delete(id)) {
+        next.add(id)
+      }
+      return next
+    })
+  }, [])
+  const clearAssignees = useCallback(() => setSelectedAssignees(new Set<string>()), [])
+
   const boardTarget = ipcOrRuntimeTargetForHostId(
     jiraTaskSourceContext?.hostId ?? accountBackedTaskSourceHostId
   )
@@ -119,7 +158,7 @@ export function TaskPageJiraContent({
           <div className="flex shrink-0 items-center gap-2 text-2xs text-muted-foreground">
             <span>
               {translate('auto.components.TaskPage.shownCount', '{{count}} shown', {
-                count: displayedJiraIssues.length,
+                count: visibleJiraIssues.length,
                 defaultValue_one: '{{count}} shown'
               })}
             </span>
@@ -128,6 +167,28 @@ export function TaskPageJiraContent({
             ) : null}
           </div>
         </div>
+        {assigneeOptions.length > 1 ? (
+          <div className="flex min-h-8 flex-none flex-wrap items-center gap-2 border-b border-border/50 px-3 py-1">
+            <JiraAssigneeFilter
+              options={assigneeOptions}
+              selected={liveAssigneeSelection}
+              onToggle={toggleAssignee}
+              onClear={clearAssignees}
+              clearLabel={translate('jira.assignee.clear', 'Todos')}
+              emptyLabel={unassignedLabel}
+            />
+            {/* Why said out loud: these avatars come from the loaded issues, so
+                the filter narrows the current result rather than re-querying. */}
+            {liveAssigneeSelection.size > 0 ? (
+              <span className="text-2xs text-muted-foreground">
+                {translate(
+                  'jira.assignee.scopeNote',
+                  'Filtra lo cargado; no vuelve a consultar Jira.'
+                )}
+              </span>
+            ) : null}
+          </div>
+        ) : null}
 
         <div
           className="min-h-0 flex-1 overflow-auto scrollbar-sleek"
@@ -174,28 +235,38 @@ export function TaskPageJiraContent({
           ) : null}
 
           {!jiraLoading &&
-          displayedJiraIssues.length === 0 &&
+          visibleJiraIssues.length === 0 &&
           !jiraError &&
           !jiraStatus.credentialError ? (
             <div className="px-4 py-10 text-center">
               <p className="text-sm font-medium text-foreground">
-                {translate('auto.components.TaskPage.eba87f2edb', 'No Jira issues found')}
+                {/* Why a separate message: Jira returning nothing and the avatar
+                    filter hiding everything look identical, and the fix differs. */}
+                {displayedJiraIssues.length > 0
+                  ? translate('jira.assignee.emptyTitle', 'Nadie seleccionado tiene issues aquí')
+                  : translate('auto.components.TaskPage.eba87f2edb', 'No Jira issues found')}
               </p>
               <p className="mt-2 text-sm text-muted-foreground">
-                {jiraHasWorkspace
+                {displayedJiraIssues.length > 0
                   ? translate(
-                      'jira.workspace.empty',
-                      'Link a Jira issue to a workspace, or choose another view.'
+                      'jira.assignee.emptyBody',
+                      'Quita el filtro por persona para ver las {{count}} issues cargadas.',
+                      { count: displayedJiraIssues.length }
                     )
-                  : jiraSearchInput
+                  : jiraHasWorkspace
                     ? translate(
-                        'auto.components.TaskPage.f51e254d35',
-                        'Try different search terms or JQL.'
+                        'jira.workspace.empty',
+                        'Link a Jira issue to a workspace, or choose another view.'
                       )
-                    : translate(
-                        'auto.components.TaskPage.94d900518d',
-                        'No issues match the selected preset.'
-                      )}
+                    : jiraSearchInput
+                      ? translate(
+                          'auto.components.TaskPage.f51e254d35',
+                          'Try different search terms or JQL.'
+                        )
+                      : translate(
+                          'auto.components.TaskPage.94d900518d',
+                          'No issues match the selected preset.'
+                        )}
               </p>
             </div>
           ) : null}
@@ -203,7 +274,7 @@ export function TaskPageJiraContent({
           {jiraViewMode === 'board' ? (
             <TaskPageJiraBoardView
               key={`${boardScopeKey}:${selectedJiraSiteId}`}
-              issues={sortedJiraIssues}
+              issues={visibleJiraIssues}
               statusOrder={displayedJiraStatusOrder}
               selectedIssue={selectedJiraIssue}
               sourceContext={jiraTaskSourceContext}
@@ -214,6 +285,23 @@ export function TaskPageJiraContent({
               showSiteContext={selectedJiraSiteId === 'all'}
               loading={jiraLoading}
               onRefresh={() => setJiraRefreshNonce((value) => value + 1)}
+            />
+          ) : jiraViewMode === 'timeline' ? (
+            <JiraTimelineView
+              issues={visibleJiraIssues}
+              selectedIssue={selectedJiraIssue}
+              onOpenIssue={openJiraDetailPage}
+              unparentedLabel={translate('jira.timeline.noEpic', 'Sin épica')}
+              activityLabel={translate('jira.timeline.activity', 'Actividad')}
+              emptyLabel={translate(
+                'jira.timeline.empty',
+                'No hay actividades que mostrar en el cronograma.'
+              )}
+              noDatesLabel={translate(
+                'jira.timeline.noDueDate',
+                'Sin fecha de vencimiento en Jira'
+              )}
+              locale={navigator.language}
             />
           ) : (
             <TaskPageJiraIssueList
@@ -234,7 +322,7 @@ export function TaskPageJiraContent({
               columns={jiraColumns}
               formatUpdatedAt={formatRelativeTime}
               getStatusTone={getJiraStatusTone}
-              issues={sortedJiraIssues}
+              issues={visibleJiraIssues}
               onOpenIssue={openJiraDetailPage}
               onStartWorkspace={handleUseJiraItem}
               selectedIssue={selectedJiraIssue}

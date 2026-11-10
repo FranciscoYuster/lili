@@ -1,4 +1,4 @@
-import { Columns3, List } from 'lucide-react'
+import { Columns3, GanttChartSquare, List } from 'lucide-react'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
@@ -37,7 +37,7 @@ export function TaskPageJiraViewControls({
         type="single"
         value={mode}
         onValueChange={(value) => {
-          if (value === 'list' || value === 'board') {
+          if (value === 'list' || value === 'board' || value === 'timeline') {
             onModeChange(value)
           }
         }}
@@ -52,6 +52,10 @@ export function TaskPageJiraViewControls({
         <ToggleGroupItem value="board">
           <Columns3 />
           {translate('jira.board.board', 'Board')}
+        </ToggleGroupItem>
+        <ToggleGroupItem value="timeline">
+          <GanttChartSquare />
+          {translate('jira.board.timeline', 'Cronograma')}
         </ToggleGroupItem>
       </ToggleGroup>
     </div>

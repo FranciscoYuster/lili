@@ -31,19 +31,31 @@ After `scripts/sync-upstream.sh`, re-check each row.
 | `src/renderer/src/store/slices/right-sidebar/right-sidebar-route.ts`            | `'harness'` and `'economy'` in the persisted-route allowlist                                  | Both panels — without it the tab silently falls back to Explorer on every click |
 | `src/renderer/src/components/right-sidebar/use-right-sidebar-activity-items.ts` | `Boxes` import + Harness item after `vault`; `DollarSign` import + Economy item after Harness | Harness panel, Economy panel                                                    |
 | `src/renderer/src/components/right-sidebar/right-sidebar-panel-content.tsx`     | lazy import + render on `effectiveTab === 'harness'` / `'economy'`                            | Harness panel, Economy panel                                                    |
+| `src/shared/jira/jira-types.ts`                                                 | `startDate` and `dueDate` on `JiraIssue`                                                      | Jira Cronograma — a bar needs both ends                                         |
+| `src/main/jira/jira-issue-mapping.ts`                                           | `'duedate'` in `ISSUE_FIELDS`; `startDate` in `JiraAgileFieldIds`; both mapped                | Jira Cronograma                                                                 |
+| `src/main/jira/jira-agile-fields.ts`                                            | discovers the site's "Start date" date picker; adds it to `agileFieldIdList`                  | Jira Cronograma — Cloud has no system start date, each site names its own       |
+| `src/renderer/src/components/jira-view-mode-storage.ts`                         | `'timeline'` in `JiraViewMode`                                                                | Jira Cronograma                                                                 |
+| `src/renderer/src/components/task-page/jira/task-page-jira-view-controls.tsx`   | third toggle after List and Board                                                             | Jira Cronograma                                                                 |
+| `src/renderer/src/components/task-page/jira/Content.tsx`                        | assignee avatar row, `visibleJiraIssues` filter, Cronograma branch, empty state               | Jira assignee filter + Cronograma                                               |
 
 The Economy (`$`) panel added **no new touchpoints**: a second right-sidebar tab
 rides the same five seams as Harness, one extra line each. That is the argument
 for putting the next panel there too rather than in the main area.
 
-**18 touchpoints — over the target of 10.** Seven are the Canvas view and five the
-Harness panel,
+**24 touchpoints — over the target of 10.** Seven are the Canvas view, five the
+Harness panel and six the Jira Cronograma and assignee filter,
 and they are the floor for _any_ new top-level view: upstream deliberately
 spreads a view across the type, the lookup, the RPC schema, the store contract,
 the store defaults, the store actions, the nav and the shell, with a
 compile-time parity check that fails the build if the RPC schema is missed. The
 budget was the right thing to spend here; the next feature should go in a
 plugin unless it genuinely needs the main area.
+
+The six Jira rows split in two: three extend the issue read (a due date and the
+site's own start-date field) and three add the view. Extending the read is the
+part that will conflict on a merge, because upstream edits `ISSUE_FIELDS` and
+`mapJiraIssue` whenever it adds a field of its own. Resolving it means keeping
+both sides' entries rather than taking either version whole.
 
 ## Scripted, not hand-edited
 
@@ -77,6 +89,8 @@ keep Orca's names even though the product is called Lili:
 - `src/renderer/src/koder/` — `LiliMark.tsx`, `CanvasPage.tsx`, `CanvasTile.tsx`,
   `canvas-tile-layout.ts`, `canvas-tile-live.ts`, `canvas-tile-economy.ts`,
   `harness/HarnessPanel.tsx`, `harness/harness-lock.ts`,
-  `economy/EconomyPanel.tsx`, `economy/economy-rows.ts`
+  `economy/EconomyPanel.tsx`, `economy/economy-rows.ts`,
+  `jira/JiraAssigneeFilter.tsx`, `jira/assignee-filter.ts`,
+  `jira/JiraTimelineView.tsx`, `jira/jira-timeline-model.ts`
 - `scripts/rebrand-lili.mjs`
 - `resources/lili-logo.svg`
