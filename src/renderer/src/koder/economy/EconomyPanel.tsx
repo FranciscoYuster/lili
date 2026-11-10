@@ -12,7 +12,7 @@
  * reading.
  */
 
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { RefreshCw } from 'lucide-react'
 import { useAppStore } from '@/store'
 import { useTranslate } from '@/i18n/use-translate'
@@ -70,6 +70,11 @@ export default function EconomyPanel(): React.JSX.Element {
   const setCodexRange = useAppStore((state) => state.setCodexUsageRange)
   const setOpenCodeRange = useAppStore((state) => state.setOpenCodeUsageRange)
   const setMuseRange = useAppStore((state) => state.setMuseUsageRange)
+
+  const fetchClaude = useAppStore((state) => state.fetchClaudeUsage)
+  const fetchCodex = useAppStore((state) => state.fetchCodexUsage)
+  const fetchOpenCode = useAppStore((state) => state.fetchOpenCodeUsage)
+  const fetchMuse = useAppStore((state) => state.fetchMuseUsage)
 
   const refreshClaude = useAppStore((state) => state.refreshClaudeUsage)
   const refreshCodex = useAppStore((state) => state.refreshCodexUsage)
@@ -138,6 +143,19 @@ export default function EconomyPanel(): React.JSX.Element {
     }
   }, [refreshClaude, refreshCodex, refreshOpenCode, refreshMuse])
 
+  // Why this has to exist: nothing else in the app loads usage for this panel.
+  // Without it every provider's scanState stays null, the opt-in prompt below
+  // never qualifies to render, and the dashboard shows a confident set of zeros
+  // that look like a measured result rather than an unread one.
+  useEffect(() => {
+    // Each fetch reads its own opt-in flag first and returns before scanning when
+    // it is off, so calling all four unconditionally costs nothing when disabled.
+    void fetchClaude?.()
+    void fetchCodex?.()
+    void fetchOpenCode?.()
+    void fetchMuse?.()
+  }, [fetchClaude, fetchCodex, fetchOpenCode, fetchMuse])
+
   const enableAll = useCallback(() => {
     void enableClaude?.()
     void enableCodex?.()
@@ -145,7 +163,17 @@ export default function EconomyPanel(): React.JSX.Element {
     void enableMuse?.()
   }, [enableClaude, enableCodex, enableOpenCode, enableMuse])
 
-  if (scanStateKnown && !anyEnabled) {
+  // Zeros and "not read yet" are different claims, and only one of them is true
+  // before the first fetch lands. Saying nothing beats saying US$0,00.
+  if (!scanStateKnown) {
+    return (
+      <div className="flex flex-1 items-center justify-center p-6 text-center text-sm text-muted-foreground">
+        {t('koder.economy.reading', 'Leyendo el consumo de los agentes…')}
+      </div>
+    )
+  }
+
+  if (!anyEnabled) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center gap-3 p-6 text-center">
         <p className="text-sm text-muted-foreground">
