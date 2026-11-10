@@ -100,6 +100,7 @@ export type RightSidebarTab =
   | 'vault'
   | 'harness'
   | 'economy'
+  | 'jira'
   | 'workspaces'
   | 'pr-checks'
   | 'source-control'

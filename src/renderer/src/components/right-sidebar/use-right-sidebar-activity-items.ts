@@ -21,6 +21,7 @@ import { useShortcutLabel } from '@/hooks/useShortcutLabel'
 import { translate } from '@/i18n/i18n'
 import { useUiLanguageRevision } from '@/i18n/use-ui-language-revision'
 import { AgentSessionHistoryIcon } from './agent-session-history-icon'
+import { JiraTabIcon } from '@/koder/jira/JiraTabIcon'
 import type { ActivityBarItem } from './activity-bar-buttons'
 
 export type RightSidebarActivityItems = {
@@ -95,6 +96,12 @@ export function useRightSidebarActivityItems({
         id: 'economy',
         icon: DollarSign,
         title: translate('auto.components.right.sidebar.index.koderEconomy', 'Economía'),
+        shortcut: ''
+      },
+      {
+        id: 'jira',
+        icon: JiraTabIcon,
+        title: translate('auto.components.right.sidebar.index.koderJira', 'Jira'),
         shortcut: ''
       },
       {
