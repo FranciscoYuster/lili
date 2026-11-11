@@ -678,7 +678,7 @@ module.exports = {
     // Omit mdx because Ubuntu 24.04 maps it to application/x-genesis-32x-rom; claiming it would need a glob override.
     mimeTypes: ['text/markdown', 'text/csv', 'text/tab-separated-values'],
     // Avoid GNOME Orca’s orca package and /usr/bin/orca names.
-    executableName: 'lili-ide',
+    executableName: 'xinxin-ide',
     // Use icns to generate hicolor sizes; some Linux docks ignore a lone 1024px PNG.
     icon: 'resources/build/icon.icns',
     desktop: {

@@ -65,9 +65,10 @@ const localeFiles = existsSync(localesDir)
 const SOURCE_TARGETS = [
   'src/renderer/src/components/Landing.tsx',
   'src/renderer/src/i18n/en-runtime-required.json',
-  // The window and browser-tab title. Missed on the first rename, which is how
-  // "lili" survived in the most visible place there is.
-  'src/renderer/index.html'
+  // Both titles. The desktop shell and the web client have separate documents,
+  // which is how the first rename reached one and walked past the other.
+  'src/renderer/index.html',
+  'src/renderer/web-index.html'
 ].map((p) => join(repoRoot, p))
 
 /** Exact one-off swaps that a word-level pass cannot express. */

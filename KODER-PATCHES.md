@@ -12,7 +12,7 @@ After `scripts/sync-upstream.sh`, re-check each row.
 
 | File                                                                            | What changed                                                                                                                           | Why                                                                           |
 | ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| `config/electron-builder.config.cjs`                                            | `appId`, `productName`, `executableName` (x2)                                                                                          | Ship as 信心, not Orca                                                        |
+| `config/electron-builder.config.cjs`                                            | `appId`, `productName`, `executableName` (x2, mac and linux)                                                                           | Ship as 信心, not Orca                                                        |
 | `src/renderer/index.html`                                                       | `<title>`                                                                                                                              | Window title                                                                  |
 | `src/renderer/web-index.html`                                                   | `<title>`                                                                                                                              | Browser tab title                                                             |
 | `src/main/window/createMainWindow.ts`                                           | default window title                                                                                                                   | Window title                                                                  |
@@ -91,7 +91,8 @@ keep Orca's names even though the product is called 信心:
 - the packaged artifact names (`orca-macos-${arch}.dmg`, `orca-linux.AppImage`,
   `orca-windows-setup.exe`) — four upstream tests and the adhoc manifest script
   assert on them, and a DMG filename is not what anyone reads the product's
-  name from. The bundle inside is `信心.app`.
+  name from. The bundle inside is `信心.app`. The executable names did move:
+  nothing under `config/scripts` or `tests` reads them.
   (UI strings in `src/renderer/src/i18n/locales/*` ARE rebranded, but by the
   script above rather than by hand, so they are not merge-conflict sites you
   resolve manually.)
