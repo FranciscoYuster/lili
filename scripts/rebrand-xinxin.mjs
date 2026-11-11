@@ -1,14 +1,23 @@
 #!/usr/bin/env node
 /**
- * Rebrands upstream Orca as Lili across user-visible surfaces.
+ * Rebrands upstream Orca as 信心 across user-visible surfaces.
  *
  * Idempotent and re-runnable: run it after every `git merge upstream/main`
  * instead of resolving a thousand conflicts by hand. The fork's branding is
  * therefore one script, not a thousand edits — which is the whole point, since
  * upstream ships roughly 1.5 releases a day and rewrites locale files often.
  *
- *   node scripts/rebrand-lili.mjs           apply
- *   node scripts/rebrand-lili.mjs --check   report only, exit 1 if work remains
+ *   node scripts/rebrand-xinxin.mjs           apply
+ *   node scripts/rebrand-xinxin.mjs --check   report only, exit 1 if work remains
+ *
+ * It also accepts `Lili`, the fork's previous name, so a tree rebranded once
+ * before converges on a second run instead of needing a one-off migration.
+ *
+ * WHY THE DISPLAY NAME IS CJK AND THE IDENTIFIERS ARE NOT
+ * 信心 is what a person reads: window titles, the wordmark, the macOS bundle.
+ * Everything a machine reads stays ASCII — `xinxin` for files and executables —
+ * because a build artifact, a shell completion and a CI upload all assume a
+ * path they can type.
  *
  * WHAT IT DELIBERATELY LEAVES ALONE
  * Only capitalised `Orca`/`ORCA` is replaced, because every identifier that
@@ -28,10 +37,21 @@ import { join, relative } from 'node:path'
 const repoRoot = join(import.meta.dirname, '..')
 const checkOnly = process.argv.includes('--check')
 
-/** Capitalised only; `ORCA_` is excluded so env-var names survive. */
+const DISPLAY_NAME = '信心'
+
+/**
+ * Capitalised only; `ORCA_` is excluded so env-var names survive. 信心 has no
+ * case, so the shouted and capitalised forms collapse onto the same output —
+ * which is also why the old lower-casing pass for the wordmark is gone.
+ */
 const WORD_PATTERNS = [
-  [/\bORCA(?!_)/g, 'LILI'],
-  [/\bOrca\b/g, 'Lili']
+  [/\bORCA(?!_)/g, DISPLAY_NAME],
+  [/\bOrca\b/g, DISPLAY_NAME],
+  [/\bLILI\b/g, DISPLAY_NAME],
+  [/\bLili\b/g, DISPLAY_NAME],
+  // The wordmark shipped lower-case. Word-bounded on purpose: Turkish
+  // "Gizlilik" (privacy) contains the letters and must not be touched.
+  [/\blili\b/g, DISPLAY_NAME]
 ]
 
 const localesDir = join(repoRoot, 'src/renderer/src/i18n/locales')
@@ -44,7 +64,10 @@ const localeFiles = existsSync(localesDir)
 /** Source files whose English fallback strings are what ship when a key is missing. */
 const SOURCE_TARGETS = [
   'src/renderer/src/components/Landing.tsx',
-  'src/renderer/src/i18n/en-runtime-required.json'
+  'src/renderer/src/i18n/en-runtime-required.json',
+  // The window and browser-tab title. Missed on the first rename, which is how
+  // "lili" survived in the most visible place there is.
+  'src/renderer/index.html'
 ].map((p) => join(repoRoot, p))
 
 /** Exact one-off swaps that a word-level pass cannot express. */
@@ -52,22 +75,21 @@ const LITERAL_SWAPS = [
   [
     'src/renderer/src/components/Landing.tsx',
     "import logo from '../../../../resources/logo.svg'",
-    "import logo from '../../../../resources/lili-logo.png'"
+    "import logo from '../../../../resources/xinxin-logo.png'"
   ],
-  // The landing wordmark is set in lower case; upstream shouted its own name.
-  // Matching the whole JSON value keeps this off every other string.
   [
     'src/renderer/src/components/Landing.tsx',
-    "translate('auto.components.Landing.6ca6ff404e', 'LILI')",
-    "translate('auto.components.Landing.6ca6ff404e', 'lili')"
+    "import logo from '../../../../resources/lili-logo.png'",
+    "import logo from '../../../../resources/xinxin-logo.png'"
+  ],
+  // The landing wordmark was lower-cased for the previous name; the CJK form is
+  // the name itself, so both earlier spellings land on it.
+  [
+    'src/renderer/src/components/Landing.tsx',
+    "translate('auto.components.Landing.6ca6ff404e', 'lili')",
+    `translate('auto.components.Landing.6ca6ff404e', '${DISPLAY_NAME}')`
   ]
 ]
-
-/**
- * Locale values that are exactly `LILI` are the landing wordmark and nothing
- * else, so lower-casing by whole-value match needs no key to stay stable.
- */
-const WORDMARK_VALUE = [/":\s*"LILI"/g, '": "lili"']
 
 let changedFiles = 0
 let totalReplacements = 0
@@ -88,12 +110,7 @@ function rebrandLocale(text) {
     }
     return `"${next}"${isKey ?? ''}`
   })
-  const [wordmarkPattern, wordmarkReplacement] = WORDMARK_VALUE
-  const lowered = out.replace(wordmarkPattern, () => {
-    count += 1
-    return wordmarkReplacement
-  })
-  return { out: lowered, count }
+  return { out, count }
 }
 
 function rebrandSource(text) {
@@ -125,7 +142,7 @@ function apply(file, transform) {
   }
 }
 
-console.log(checkOnly ? 'Checking Lili branding…' : 'Applying Lili branding…')
+console.log(checkOnly ? `Checking ${DISPLAY_NAME} branding…` : `Applying ${DISPLAY_NAME} branding…`)
 
 for (const file of localeFiles) {
   apply(file, rebrandLocale)

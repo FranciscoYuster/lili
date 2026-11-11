@@ -1,10 +1,9 @@
 /**
- * Lili's mark: a halftone grid that resolves from noise into a solid edge.
+ * 信心's mark: a halftone grid that resolves from noise into a solid edge.
  *
- * The name comes from 历历 (lìlì) — "every detail, distinctly" — as in 历历在目,
- * things so clear they seem to stand right before your eyes. The dots carry that
- * literally: sparse and faint on the left, dense and touching on the right, so
- * scattered detail becomes a legible whole. It is also the screentone of
+ * The name is 信心 (xìnxīn) — faith. The dots carry it literally: sparse and
+ * faint on the left, dense and solid on the right, so what starts as scattered
+ * noise resolves into something you can stand on. It is also the screentone of
  * single-ink manga printing, where every grey is really a count of dots.
  *
  * Drawn on a 24x24 grid with five columns of growing radius. Nothing here is
@@ -15,7 +14,7 @@
 const COLUMN_RADII = [0.65, 1, 1.4, 1.8, 2] as const
 const GRID_POSITIONS = [2.6, 7.3, 12, 16.7, 21.4] as const
 
-type LiliMarkProps = {
+type XinxinMarkProps = {
   /** Rendered edge length in px. The viewBox scales, so any size stays sharp. */
   size?: number
   className?: string
@@ -23,7 +22,7 @@ type LiliMarkProps = {
   title?: string
 }
 
-export function LiliMark({ size = 24, className, title }: LiliMarkProps): React.JSX.Element {
+export function XinxinMark({ size = 24, className, title }: XinxinMarkProps): React.JSX.Element {
   return (
     <svg
       width={size}

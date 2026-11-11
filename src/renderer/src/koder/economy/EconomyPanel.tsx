@@ -209,7 +209,7 @@ export default function EconomyPanel(): React.JSX.Element {
         <p className="text-sm text-muted-foreground">
           {t(
             'koder.economy.offBody',
-            'La medición de tokens está apagada. lili lee los registros locales de tus agentes; nada sale de tu máquina.'
+            'La medición de tokens está apagada. 信心 lee los registros locales de tus agentes; nada sale de tu máquina.'
           )}
         </p>
         <button

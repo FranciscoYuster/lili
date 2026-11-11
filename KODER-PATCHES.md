@@ -12,7 +12,7 @@ After `scripts/sync-upstream.sh`, re-check each row.
 
 | File                                                                            | What changed                                                                                                                           | Why                                                                           |
 | ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| `config/electron-builder.config.cjs`                                            | `appId`, `productName`, `executableName` (x2)                                                                                          | Ship as Lili, not Orca                                                        |
+| `config/electron-builder.config.cjs`                                            | `appId`, `productName`, `executableName` (x2)                                                                                          | Ship as 信心, not Orca                                                        |
 | `src/renderer/index.html`                                                       | `<title>`                                                                                                                              | Window title                                                                  |
 | `src/renderer/web-index.html`                                                   | `<title>`                                                                                                                              | Browser tab title                                                             |
 | `src/main/window/createMainWindow.ts`                                           | default window title                                                                                                                   | Window title                                                                  |
@@ -24,7 +24,7 @@ After `scripts/sync-upstream.sh`, re-check each row.
 | `src/renderer/src/store/slices/ui/ui-slice-contract-core.ts`                    | `UiViewHistory`, `previousViewBeforeCanvas`, `openCanvasPage`, `closeCanvasPage`                                                       | Canvas view                                                                   |
 | `src/renderer/src/store/slices/ui/ui-slice-task-actions.ts`                     | initial `previousViewBeforeCanvas`                                                                                                     | Canvas view                                                                   |
 | `src/renderer/src/store/slices/ui/ui-slice-view-actions.ts`                     | open/close implementations                                                                                                             | Canvas view                                                                   |
-| `src/renderer/src/components/sidebar/SidebarNav.tsx`                            | Canvas nav button under Lili Mobile                                                                                                    | Canvas view                                                                   |
+| `src/renderer/src/components/sidebar/SidebarNav.tsx`                            | Canvas nav button under 信心 Mobile                                                                                                    | Canvas view                                                                   |
 | `src/renderer/src/app-shell/AppWorkspaceShell.tsx`                              | lazy import + render on `activeView === 'canvas'`                                                                                      | Canvas view                                                                   |
 | `src/shared/ui-chrome-types.ts`                                                 | `'harness'`, `'economy'` and `'jira'` in `RightSidebarTab`                                                                             | Harness, Economy and Jira panels                                              |
 | `src/shared/rpc-contract/client-ui-params.ts`                                   | `'harness'`, `'economy'` and `'jira'` in `STATIC_RIGHT_SIDEBAR_TABS`                                                                   | Harness, Economy and Jira panels                                              |
@@ -60,7 +60,12 @@ both sides' entries rather than taking either version whole.
 
 ## Scripted, not hand-edited
 
-`node scripts/rebrand-lili.mjs` — **re-run after every upstream merge.**
+`node scripts/rebrand-xinxin.mjs` — **re-run after every upstream merge.**
+
+The script also accepts `Lili`, the fork's earlier name, so a tree branded
+before the rename converges on a second run rather than needing a migration.
+信心 has no case, so the shouted and capitalised forms collapse onto one output
+and the old wordmark lower-casing pass is gone.
 
 It rewrites ~15,400 occurrences across the 11 locale files, `en-runtime-required.json`
 and `Landing.tsx` (wordmark, logo import). Idempotent; `--check` reports without
@@ -73,7 +78,7 @@ Only capitalised `Orca`/`ORCA` is touched, so `orca://`, `~/.orca/`, `orcad`,
 ## Deliberately NOT changed
 
 Renaming these would touch ~10,540 files and break working behaviour, so they
-keep Orca's names even though the product is called Lili:
+keep Orca's names even though the product is called 信心:
 
 - `orca://` protocol scheme (127 refs) — breaks pairing
 - `~/.orca/` config and credential paths (268 refs) — orphans stored Jira and
@@ -81,13 +86,17 @@ keep Orca's names even though the product is called Lili:
 - `ORCA_*` environment variables (9,526 refs)
 - `orcad` headless daemon (8,871 refs)
 - `orca-plugin.json` manifest filename (157 refs) — breaks plugin installs
+- the packaged artifact names (`orca-macos-${arch}.dmg`, `orca-linux.AppImage`,
+  `orca-windows-setup.exe`) — four upstream tests and the adhoc manifest script
+  assert on them, and a DMG filename is not what anyone reads the product's
+  name from. The bundle inside is `信心.app`.
   (UI strings in `src/renderer/src/i18n/locales/*` ARE rebranded, but by the
   script above rather than by hand, so they are not merge-conflict sites you
   resolve manually.)
 
 ## Owned directories (no conflicts expected)
 
-- `src/renderer/src/koder/` — `LiliMark.tsx`, `CanvasPage.tsx`, `CanvasTile.tsx`,
+- `src/renderer/src/koder/` — `XinxinMark.tsx`, `CanvasPage.tsx`, `CanvasTile.tsx`,
   `canvas-tile-layout.ts`, `canvas-tile-live.ts`, `canvas-tile-economy.ts`,
   `harness/HarnessPanel.tsx`, `harness/harness-lock.ts`,
   `economy/EconomyPanel.tsx`, `economy/economy-panel-parts.tsx`,
@@ -95,5 +104,5 @@ keep Orca's names even though the product is called Lili:
   `jira/JiraAssigneeFilter.tsx`, `jira/assignee-filter.ts`,
   `jira/JiraTimelineView.tsx`, `jira/jira-timeline-model.ts`,
   `jira/JiraPanel.tsx`, `jira/JiraTabIcon.tsx`, `jira/project-issues.ts`
-- `scripts/rebrand-lili.mjs`
-- `resources/lili-logo.svg`
+- `scripts/rebrand-xinxin.mjs`
+- `resources/xinxin-logo.svg`, `resources/xinxin-logo.png`

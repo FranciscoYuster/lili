@@ -1,7 +1,7 @@
 import { pairedRuntimeConnectionFromOffer } from '../../../shared/remote-runtime/pairing/paired-runtime-connection'
 import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
 import { Cable, Loader2, ShieldAlert, Trash2 } from 'lucide-react'
-import { LiliMark } from '@/koder/LiliMark'
+import { XinxinMark } from '@/koder/XinxinMark'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -33,7 +33,7 @@ export default function WebConnect({
 }: WebConnectProps): React.JSX.Element {
   const existingEnvironment = readStoredWebRuntimeEnvironment()
   const [name, setName] = useState(
-    (!confirmReplacingSavedServer && existingEnvironment?.name) || 'Lili Server'
+    (!confirmReplacingSavedServer && existingEnvironment?.name) || '信心 Server'
   )
   const [pairingCode, setPairingCode] = useState(initialPairingInput ?? '')
   const [error, setError] = useState<string | null>(null)
@@ -46,7 +46,7 @@ export default function WebConnect({
   const connect = async (): Promise<void> => {
     setError(null)
     if (!parsedOffer) {
-      setError('Ingresa una URL o un código de emparejamiento de Lili válido.')
+      setError('Ingresa una URL o un código de emparejamiento de 信心 válido.')
       return
     }
     if (parsedOffer.scope === 'mobile') {
@@ -60,7 +60,7 @@ export default function WebConnect({
     }
     if (isMixedContentWebSocket(parsedOffer.endpoint)) {
       setError(
-        'Esta página HTTPS no puede conectarse a un servidor Lili por ws:// sin cifrar. Abre el cliente web por HTTP o emparéjate con un endpoint wss://.'
+        'Esta página HTTPS no puede conectarse a un servidor 信心 por ws:// sin cifrar. Abre el cliente web por HTTP o emparéjate con un endpoint wss://.'
       )
       return
     }
@@ -128,16 +128,16 @@ export default function WebConnect({
       <div className="flex w-full max-w-[520px] flex-col gap-5 rounded-lg border border-border bg-card p-5 shadow-sm">
         <div className="flex items-start gap-3">
           <div className="flex size-9 shrink-0 items-center justify-center rounded-md border border-border bg-muted">
-            <LiliMark size={20} />
+            <XinxinMark size={20} />
           </div>
           <div className="min-w-0">
             <h1 className="text-base font-semibold leading-6">
-              {translate('auto.web.WebConnect.e3bcd082ac', 'Conectar con Lili')}
+              {translate('auto.web.WebConnect.e3bcd082ac', 'Conectar con 信心')}
             </h1>
             <p className="mt-1 text-sm leading-5 text-muted-foreground">
               {translate(
                 'auto.web.WebConnect.3affe7de3a',
-                'Pega la URL de emparejamiento de un servidor Lili que este navegador pueda alcanzar.'
+                'Pega la URL de emparejamiento de un servidor 信心 que este navegador pueda alcanzar.'
               )}
             </p>
           </div>

@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href="https://koderspa.com"><img src="resources/lili-logo.png" alt="lili" width="64" valign="middle" /></a> lili
+  <a href="https://koderspa.com"><img src="resources/xinxin-logo.png" alt="信心" width="64" valign="middle" /></a> 信心
 </h1>
 
 <p align="center">
@@ -19,10 +19,10 @@
 </p>
 
 <p align="center">
-  <sub>lili is a fork of <a href="https://github.com/stablyai/orca">Orca</a> (MIT) by <a href="https://koderspa.com">Koder SpA</a>. The name comes from 历历 (<i>lìlì</i>), "every detail, distinctly".</sub>
+  <sub>信心 is a fork of <a href="https://github.com/stablyai/orca">Orca</a> (MIT) by <a href="https://koderspa.com">Koder SpA</a>. The name is 信心 (<i>xìnxīn</i>), "faith".</sub>
 </p>
 
-## What lili adds
+## What 信心 adds
 
 <table>
 <tr>
@@ -36,7 +36,7 @@ The strongest state wins: if one pane waits on a permission prompt and another s
 
 </td>
 <td width="50%">
-  <img src="docs/assets/lili/canvas.png" alt="Six workspace tiles on the canvas, each showing its agent's last message and state" width="100%" />
+  <img src="docs/assets/xinxin/canvas.png" alt="Six workspace tiles on the canvas, each showing its agent's last message and state" width="100%" />
 </td>
 </tr>
 <tr>
@@ -50,7 +50,7 @@ Three states per skill — **green** pinned in `skills-lock.json`, **amber** ins
 
 </td>
 <td width="50%">
-  <img src="docs/assets/lili/harness.png" alt="The Harness panel listing skills with their origin and lock state, and the project's MCP servers" width="100%" />
+  <img src="docs/assets/xinxin/harness.png" alt="The Harness panel listing skills with their origin and lock state, and the project's MCP servers" width="100%" />
 </td>
 </tr>
 <tr>
@@ -58,7 +58,7 @@ Three states per skill — **green** pinned in `skills-lock.json`, **amber** ins
 
 ### Token Economy
 
-Orca already attributes each logged turn to the worktree that produced it and prices it, then shows the result only in a stats pane. lili puts those numbers on the tile you are already looking at, and keeps spend that belongs to no workspace separate instead of spreading it across the ones that exist.
+Orca already attributes each logged turn to the worktree that produced it and prices it, then shows the result only in a stats pane. 信心 puts those numbers on the tile you are already looking at, and keeps spend that belongs to no workspace separate instead of spreading it across the ones that exist.
 
 Cost is an estimate from published per-model rates, never an invoice, and the scan stays opt-in because it reads your local agent logs.
 
@@ -115,7 +115,7 @@ Run any agent in Chat UI or as the raw CLI, and move a conversation between the 
 
 ### Run Anywhere
 
-Pair a remote lili server, work on any SSH host, or give a worktree its own cloud VM. Your agents keep running when your laptop sleeps.
+Pair a remote 信心 server, work on any SSH host, or give a worktree its own cloud VM. Your agents keep running when your laptop sleeps.
 
 [Docs →](https://www.onorca.dev/docs/ways-to-run)
 
@@ -129,7 +129,7 @@ Pair a remote lili server, work on any SSH host, or give a worktree its own clou
 
 ### Mobile App
 
-Pair lili with the mobile app to get pinged when an agent needs you, reply in chat, and keep work moving on any of your machines when you are away from your desk.
+Pair 信心 with the mobile app to get pinged when an agent needs you, reply in chat, and keep work moving on any of your machines when you are away from your desk.
 
 [iOS App Store](https://apps.apple.com/us/app/orca-ide/id6766130217) · [Android APK](https://www.onorca.dev/download/android) · [Docs →](https://www.onorca.dev/docs/mobile)
 
@@ -185,13 +185,13 @@ Quickly split tasks into isolated environments, so multiple agents can work side
 
 ### Design Mode
 
-Click any element in lili's browser to copy its HTML, styles, and selector, then paste it into your agent's chat.
+Click any element in 信心's browser to copy its HTML, styles, and selector, then paste it into your agent's chat.
 
 [Docs →](https://www.onorca.dev/docs/browser/design-mode)
 
 </td>
 <td width="50%">
-  <a href="https://www.onorca.dev/docs/browser/design-mode"><picture><source srcset="docs/assets/readme-features/design-mode.webp" type="image/webp"><img src="docs/assets/readme-features/design-mode.poster.jpg" alt="Picking a button in lili's browser and sending it to the agent's chat" width="100%" /></picture></a>
+  <a href="https://www.onorca.dev/docs/browser/design-mode"><picture><source srcset="docs/assets/readme-features/design-mode.webp" type="image/webp"><img src="docs/assets/readme-features/design-mode.poster.jpg" alt="Picking a button in 信心's browser and sending it to the agent's chat" width="100%" /></picture></a>
 </td>
 </tr>
 <tr>
@@ -205,7 +205,7 @@ See your GitHub, Jira and Linear tasks in one place, and start a workspace for e
 
 </td>
 <td width="50%">
-  <a href="https://www.onorca.dev/docs/review/linear"><picture><source srcset="docs/assets/readme-features/github-linear-tasks.webp" type="image/webp"><img src="docs/assets/readme-features/github-linear-tasks.poster.jpg" alt="GitHub and Linear issues in lili, with a workspace started from a Linear issue" width="100%" /></picture></a>
+  <a href="https://www.onorca.dev/docs/review/linear"><picture><source srcset="docs/assets/readme-features/github-linear-tasks.webp" type="image/webp"><img src="docs/assets/readme-features/github-linear-tasks.poster.jpg" alt="GitHub and Linear issues in 信心, with a workspace started from a Linear issue" width="100%" /></picture></a>
 </td>
 </tr>
 <tr>
@@ -213,7 +213,7 @@ See your GitHub, Jira and Linear tasks in one place, and start a workspace for e
 
 ### The CLI
 
-Anything you can do in lili, your agents can do too: create worktrees, start workers, drive the browser and desktop apps, and schedule automations, all from the command line.
+Anything you can do in 信心, your agents can do too: create worktrees, start workers, drive the browser and desktop apps, and schedule automations, all from the command line.
 
 [Docs →](https://www.onorca.dev/docs/cli/overview)
 
@@ -253,7 +253,7 @@ Put agents, terminals, browsers, and diffs side by side in split panes shaped to
 </table>
 
 > Every **Docs →** link in this section points at Orca's documentation. These
-> features come from upstream and work the same way in lili; only Canvas, Harness
+> features come from upstream and work the same way in 信心; only Canvas, Harness
 > and Token Economy are new here.
 
 **Also in the box:**
@@ -262,7 +262,7 @@ Put agents, terminals, browsers, and diffs side by side in split panes shaped to
 - **[Jump Anywhere](https://www.onorca.dev/docs/model/quick-open)**: one shortcut jumps to any workspace or tab across every repo and host.
 - **[Rich Previews](https://www.onorca.dev/docs/editing/viewers)**: open images, PDFs, and Markdown right in the workspace, next to the agent that made them.
 - **[Mobile Emulator](https://www.onorca.dev/docs/cli/overview#mobile-emulator)**: run an iOS Simulator or Android emulator beside your agent, and let it tap, type, and check its own work.
-- **[Dictation](https://www.onorca.dev/docs/settings#voice)**: press a shortcut and talk. lili types what you say into the agent's prompt or terminal.
+- **[Dictation](https://www.onorca.dev/docs/settings#voice)**: press a shortcut and talk. 信心 types what you say into the agent's prompt or terminal.
 - **[Usage &amp; Accounts](https://www.onorca.dev/docs/agents/usage-tracking)**: see how much of your agent limits you've used and when they reset, and switch accounts without logging out.
 - **[Automations](https://www.onorca.dev/docs/cli/automations)**: schedule prompts to run on any repo: nightly dependency bumps, weekly triage, flaky-test sweeps.
 - **[Computer Use](https://www.onorca.dev/docs/cli/computer-use)**: when there's no CLI or API, agents can see and drive desktop apps and external browsers.
@@ -272,7 +272,7 @@ Put agents, terminals, browsers, and diffs side by side in split panes shaped to
 
 ## Supported Agents
 
-Works with **any CLI agent** — if it runs in a terminal, it runs in lili.
+Works with **any CLI agent** — if it runs in a terminal, it runs in 信心.
 
 <p>
   <a href="https://docs.anthropic.com/claude/docs/claude-code"><kbd><img src="docs/assets/claude-logo.svg" alt="Claude Code logo" width="16" valign="middle" /> Claude Code</kbd></a> &nbsp;
@@ -316,7 +316,7 @@ Works with **any CLI agent** — if it runs in a terminal, it runs in lili.
 
 ## Install
 
-lili has no published builds yet. Run it from source — Node 22+ and pnpm 12.
+信心 has no published builds yet. Run it from source — Node 22+ and pnpm 12.
 
 ```bash
 git clone https://github.com/FranciscoYuster/lili.git
@@ -354,7 +354,7 @@ Pair with your desktop app to monitor and steer your agents from your phone.
 
 ## Community &amp; Support
 
-lili is a fork, so the community below is Orca's. For anything about lili itself,
+信心 is a fork, so the community below is Orca's. For anything about 信心 itself,
 open an issue on [this repo](https://github.com/FranciscoYuster/lili/issues).
 
 - **Discord:** Join the community on **[Discord](https://discord.gg/fzjDKHxv8Q)**.
@@ -367,7 +367,7 @@ open an issue on [this repo](https://github.com/FranciscoYuster/lili/issues).
 
 - **Feedback &amp; Ideas:** We ship fast. Missing something? [Request a new feature](https://github.com/stablyai/orca/issues).
 - **Privacy:** See the [privacy &amp; telemetry docs](https://www.onorca.dev/docs/telemetry) for what anonymous usage data Orca collects and how to opt out.
-- **Show Support:** [Star Orca](https://github.com/stablyai/orca) — lili exists because they ship daily.
+- **Show Support:** [Star Orca](https://github.com/stablyai/orca) — 信心 exists because they ship daily.
 
 ---
 
@@ -381,17 +381,17 @@ npx oxlint src     # lint
 npx oxfmt --write  # format
 ```
 
-lili's own code lives in `src/renderer/src/koder/`. Every change to an upstream
+信心's own code lives in `src/renderer/src/koder/`. Every change to an upstream
 file is listed one by one in [KODER-PATCHES.md](KODER-PATCHES.md), so merging
 upstream stays cheap. Branding is applied by a re-runnable script
-(`scripts/rebrand-lili.mjs`), never by hand — which is also why `~/.orca/`,
+(`scripts/rebrand-xinxin.mjs`), never by hand — which is also why `~/.orca/`,
 `orca://` and `ORCA_*` survive untouched: renaming them would break every merge
 and orphan your saved credentials.
 
 ### Contributors
 
 <a href="https://github.com/FranciscoYuster/lili/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=FranciscoYuster/lili&max=100&columns=20" alt="lili contributors" />
+  <img src="https://contrib.rocks/image?repo=FranciscoYuster/lili&max=100&columns=20" alt="信心 contributors" />
 </a>
 
 Upstream's contributors are credited on [Orca's own
@@ -404,7 +404,7 @@ Windows code signing sponsored/provided by [SignPath.io](https://signpath.io), c
 
 ## Credits &amp; License
 
-lili is a fork of [Orca](https://github.com/stablyai/orca) by Stably AI, under the
+信心 is a fork of [Orca](https://github.com/stablyai/orca) by Stably AI, under the
 MIT License. All credit for the base belongs to its authors and contributors.
 
-lili is free and open source under the same [MIT License](LICENSE).
+信心 is free and open source under the same [MIT License](LICENSE).

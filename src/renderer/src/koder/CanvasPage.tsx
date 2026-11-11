@@ -15,7 +15,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useAppStore } from '@/store'
 import { useAllWorktrees } from '@/store/slices/worktrees/listing/use-worktree-catalog'
 import { useTranslate } from '@/i18n/use-translate'
-import { LiliMark } from './LiliMark'
+import { XinxinMark } from './XinxinMark'
 import { CanvasTile, type CanvasTileModel } from './CanvasTile'
 import {
   defaultPosition,
@@ -306,7 +306,7 @@ export default function CanvasPage(): React.JSX.Element {
       {tiles.length === 0 ? (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <div className="flex max-w-sm flex-col items-center gap-3 text-center">
-            <LiliMark size={40} className="text-muted-foreground" />
+            <XinxinMark size={40} className="text-muted-foreground" />
             <p className="text-sm text-muted-foreground">
               {t(
                 'koder.canvas.empty',

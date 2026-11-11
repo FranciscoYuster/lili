@@ -12,7 +12,7 @@ import {
 import { ShortcutKeyCombo } from './ShortcutKeyCombo'
 import { useShortcutKeyDetails, type ShortcutKeyComboDetails } from '@/hooks/useShortcutLabel'
 import { useMountedRef } from '@/hooks/useMountedRef'
-import logo from '../../../../resources/lili-logo.png'
+import logo from '../../../../resources/xinxin-logo.png'
 import { translate } from '@/i18n/i18n'
 import { hasGitHubBackedProject, type PreflightIssue } from './landing-preflight-issues'
 import { useLandingPreflightRuntime } from './landing-preflight-runtime'
@@ -265,12 +265,12 @@ export default function Landing(): React.JSX.Element {
           >
             <img
               src={logo}
-              alt={translate('auto.components.Landing.520304a067', 'Lili logo')}
+              alt={translate('auto.components.Landing.520304a067', '信心 logo')}
               className="h-full w-full object-cover"
             />
           </div>
           <h1 className="text-4xl font-bold text-foreground tracking-tight">
-            {translate('auto.components.Landing.6ca6ff404e', 'lili')}
+            {translate('auto.components.Landing.6ca6ff404e', '信心')}
           </h1>
 
           {preflightIssues.length > 0 && <PreflightBanner issues={preflightIssues} repos={repos} />}

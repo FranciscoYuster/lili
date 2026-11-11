@@ -1,5 +1,5 @@
 /**
- * What the agents have cost, per workspace, across every agent lili can read.
+ * What the agents have cost, per workspace, across every agent 信心 can read.
  *
  * Four scanners feed this — Claude, Codex, OpenCode and Muse — and all four key
  * their project rows the same way, `worktree:<id>`, through one shared
