@@ -37,13 +37,15 @@ After `scripts/sync-upstream.sh`, re-check each row.
 | `src/renderer/src/components/jira-view-mode-storage.ts`                         | `'timeline'` in `JiraViewMode`                                                                                                         | Jira Cronograma                                                               |
 | `src/renderer/src/components/task-page/jira/task-page-jira-view-controls.tsx`   | third toggle after List and Board                                                                                                      | Jira Cronograma                                                               |
 | `src/renderer/src/components/task-page/jira/Content.tsx`                        | assignee avatar row, `visibleJiraIssues` filter, Cronograma branch, empty state                                                        | Jira assignee filter + Cronograma                                             |
+| `src/renderer/src/app-shell/TitlebarLeftControls.tsx`                           | the app-name wordmark is a button that clears the active workspace and returns to the Landing                                          | Click the name to go home                                                     |
+| `src/renderer/src/assets/main.css`                                              | `.titlebar-app-name` reset as a button, plus a hover colour                                                                            | Click the name to go home                                                     |
 
 The Economy (`$`) and Jira panels added **no new touchpoints**: each extra
 right-sidebar tab rides the same five seams as Harness, one more line each. That
 is the argument for putting the next panel there too rather than in the main
 area.
 
-**24 touchpoints — over the target of 10.** Seven are the Canvas view, five the
+**26 touchpoints — over the target of 10.** Seven are the Canvas view, five the
 Harness panel and six the Jira Cronograma and assignee filter,
 and they are the floor for _any_ new top-level view: upstream deliberately
 spreads a view across the type, the lookup, the RPC schema, the store contract,

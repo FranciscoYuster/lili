@@ -21,6 +21,8 @@ import type { AppChromeLayout } from './use-app-chrome-layout'
 /** Reuse left chrome across full-width and sidebar-width headers so controls/popovers stay consistent. */
 export function TitlebarLeftControls({ layout }: { layout: AppChromeLayout }): React.JSX.Element {
   const toggleSidebar = useAppStore((s) => s.toggleSidebar)
+  const setActiveView = useAppStore((s) => s.setActiveView)
+  const setActiveWorktree = useAppStore((s) => s.setActiveWorktree)
   const updateSettings = useAppStore((s) => s.updateSettings)
   const canGoBackWorktree = useAppStore(canGoBackWorktreeHistory)
   const canGoForwardWorktree = useAppStore(canGoForwardWorktreeHistory)
@@ -64,14 +66,24 @@ export function TitlebarLeftControls({ layout }: { layout: AppChromeLayout }): R
         {layout.showSidebar && !hasCustomTitleBar && layout.showTitlebarAppName && (
           <ContextMenu>
             <ContextMenuTrigger asChild>
-              <div
+              <button
+                type="button"
                 className="titlebar-app-name"
-                aria-label={translate('auto.App.5096cbbc86', 'Orca')}
+                aria-label={translate('koder.titlebar.home', 'Ir al inicio')}
+                title={translate('koder.titlebar.home', 'Ir al inicio')}
+                // Home is the Landing, and the Landing only renders with no active
+                // workspace — so going there means clearing the selection, not just
+                // switching the view. Setting the view alone would land on whatever
+                // worktree was open and look like the click did nothing.
+                onClick={() => {
+                  setActiveWorktree(null)
+                  setActiveView('terminal')
+                }}
               >
                 <span className="titlebar-app-name-main">
                   {translate('auto.App.5096cbbc86', 'Orca')}
                 </span>
-              </div>
+              </button>
             </ContextMenuTrigger>
             <ContextMenuContent>
               <ContextMenuItem

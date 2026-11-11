@@ -1288,6 +1288,10 @@ html.native-shell .app-layout {
 
 .titlebar-app-name {
   -webkit-app-region: no-drag;
+  appearance: none;
+  background: none;
+  border: 0;
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -1310,6 +1314,10 @@ html.native-shell .app-layout {
    inherit that panel's contrast instead of the generic titlebar text color. */
 .titlebar-left:not(.titlebar-left-floating) .titlebar-app-name {
   color: var(--worktree-sidebar-foreground);
+}
+
+.titlebar-app-name:hover {
+  color: var(--foreground);
 }
 
 .titlebar-app-name-main {
