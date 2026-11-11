@@ -42,6 +42,12 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
+      # build:desktop:assets ends with the mobile web bundle, which refuses to
+      # run from the root install alone. Without this the whole build fails at
+      # the last step, after everything the desktop actually needs has passed.
+      - name: Install mobile dependencies
+        run: pnpm -C mobile install --frozen-lockfile
+
       - name: Build unpacked app
         if: ${{ !inputs.dmg }}
         run: pnpm run build:unpack
