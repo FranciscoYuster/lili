@@ -1,0 +1,68 @@
+# Preview builds of 信心 for macOS.
+#
+# The closest thing to a Vercel preview that a desktop app can have without an
+# Apple Developer account: every run leaves an installable .app you download
+# from the run's Artifacts. Nothing is published and nothing auto-updates — on
+# macOS both need signing and notarisation.
+#
+# Deliberately manual (`workflow_dispatch`). A push trigger would spend runner
+# minutes on every commit, and most commits are not worth a build.
+name: 信心 preview (macOS)
+
+on:
+  workflow_dispatch:
+    inputs:
+      dmg:
+        description: 'Build a DMG as well as the .app (slower)'
+        type: boolean
+        default: false
+
+# A second run of the same branch replaces the first; the older build is stale
+# the moment a newer commit exists.
+concurrency:
+  group: xinxin-preview-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    # macOS runners are free on public repositories and bill 10x on private ones.
+    runs-on: macos-14
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # Reads `engines.node` so CI cannot drift from the repo's pinned major.
+          node-version-file: package.json
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build unpacked app
+        if: ${{ !inputs.dmg }}
+        run: pnpm run build:unpack
+
+      - name: Build DMG
+        if: ${{ inputs.dmg }}
+        # Unsigned on purpose: no CSC_LINK means electron-builder skips signing
+        # rather than failing, and the config only notarises release builds.
+        run: pnpm run build:mac
+
+      - name: Name the artifact after the commit
+        id: name
+        run: echo "tag=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xinxin-macos-${{ steps.name.outputs.tag }}
+          # Both paths are listed because the two jobs above produce different
+          # shapes, and a missing path is not an error for this action.
+          path: |
+            dist/mac-arm64/*.app
+            dist/*.dmg
+          if-no-files-found: error
+          retention-days: 14
