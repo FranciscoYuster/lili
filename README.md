@@ -129,9 +129,9 @@ Pair a remote 信心 server, work on any SSH host, or give a worktree its own cl
 
 ### Mobile App
 
-Pair 信心 with the mobile app to get pinged when an agent needs you, reply in chat, and keep work moving on any of your machines when you are away from your desk.
+Pair with a mobile app to get pinged when an agent needs you, reply in chat, and keep work moving when you are away from your desk.
 
-[iOS App Store](https://apps.apple.com/us/app/orca-ide/id6766130217) · [Android APK](https://www.onorca.dev/download/android) · [Docs →](https://www.onorca.dev/docs/mobile)
+Inherited from Orca and untested here — 信心 publishes no mobile build, and the store listings are Orca's own. [Docs →](https://www.onorca.dev/docs/mobile)
 
 </td>
 <td width="50%">
@@ -343,31 +343,24 @@ entry and needs the preload bridge; in a browser, use `web-index.html`.
 _Signed upstream builds, if you want Orca itself instead:_
 [onOrca.dev](https://onorca.dev/download) · `brew install --cask stablyai/orca/orca` · `yay -S stably-orca-bin`
 
-### Mobile App — iOS, Android
+### Build an app bundle
 
-Pair with your desktop app to monitor and steer your agents from your phone.
+```bash
+pnpm build:unpack   # dist/mac-arm64/信心.app, unsigned
+```
 
-- **iOS:** [Download on the App Store](https://apps.apple.com/us/app/orca-ide/id6766130217)
-- **Android:** [Download APK](https://www.onorca.dev/download/android) · [Install guide](https://www.onorca.dev/docs/android-apk)
+Unsigned, so macOS blocks it the first time: right-click the app, then Open.
 
 ---
 
-## Community &amp; Support
+## Support
 
-信心 is a fork, so the community below is Orca's. For anything about 信心 itself,
-open an issue on [this repo](https://github.com/FranciscoYuster/lili/issues).
+信心 has no community of its own. Issues and requests go to
+[this repo](https://github.com/FranciscoYuster/lili/issues).
 
-- **Discord:** Join the community on **[Discord](https://discord.gg/fzjDKHxv8Q)**.
-- **Twitter / X:** Follow **[@orca_build](https://x.com/orca_build)** for updates and announcements.
-- **WeChat:** Scan to join an Orca community WeChat group. If one group is full, join another.
-
-  <img src="docs/assets/wechat-qr-group14.jpg" alt="WeChat QR code for the Orca community" width="160" />
-  <img src="docs/assets/wechat-qr-group15.jpg" alt="WeChat QR code for the Orca community" width="160" />
-  <img src="docs/assets/wechat-qr-group16.jpg" alt="WeChat QR code for the Orca community" width="160" />
-
-- **Feedback &amp; Ideas:** We ship fast. Missing something? [Request a new feature](https://github.com/stablyai/orca/issues).
-- **Privacy:** See the [privacy &amp; telemetry docs](https://www.onorca.dev/docs/telemetry) for what anonymous usage data Orca collects and how to opt out.
-- **Show Support:** [Star Orca](https://github.com/stablyai/orca) — 信心 exists because they ship daily.
+Everything upstream — Discord, feature requests, telemetry and privacy docs —
+belongs to [Orca](https://github.com/stablyai/orca), and so does the credit:
+信心 exists because they ship daily.
 
 ---
 
@@ -390,17 +383,11 @@ and orphan your saved credentials.
 
 ### Contributors
 
-<a href="https://github.com/FranciscoYuster/lili/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=FranciscoYuster/lili&max=100&columns=20" alt="信心 contributors" />
-</a>
+信心 is built by [Francisco Yuster](https://github.com/FranciscoYuster) at
+[Koder SpA](https://koderspa.com).
 
 Upstream's contributors are credited on [Orca's own
-repo](https://github.com/stablyai/orca/graphs/contributors) — this wall is only
-the people who have worked on the fork.
-
-## Signed Builds
-
-Windows code signing sponsored/provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+repo](https://github.com/stablyai/orca/graphs/contributors).
 
 ## Credits &amp; License
 
