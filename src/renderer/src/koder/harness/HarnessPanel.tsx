@@ -12,7 +12,7 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { RefreshCw, ShieldCheck, ShieldAlert, ShieldX, Server } from 'lucide-react'
+import { RefreshCw, ShieldCheck, ShieldAlert, ShieldX, Server, Puzzle } from 'lucide-react'
 import { useAppStore } from '@/store'
 import { useTranslate } from '@/i18n/use-translate'
 import { joinPath } from '@/lib/path'
@@ -35,17 +35,20 @@ import {
   type HarnessSkillRow,
   type HarnessSkillStatus
 } from './harness-lock'
+import { buildHarnessPluginRows, type HarnessPluginRow } from './harness-plugins'
 
 type McpRow = McpServerSummary & { configLabel: string }
 
 type HarnessData = {
+  /** Plugins that put skills in front of this project's agents. */
+  plugins: HarnessPluginRow[]
   /** Every installed skill, project and global; the panel splits them for display. */
   skills: HarnessSkillRow[]
   mcp: McpRow[]
   hasLock: boolean
 }
 
-const EMPTY_DATA: HarnessData = { skills: [], mcp: [], hasLock: false }
+const EMPTY_DATA: HarnessData = { plugins: [], skills: [], mcp: [], hasLock: false }
 
 const STATUS_ICON: Record<HarnessSkillStatus, typeof ShieldCheck> = {
   locked: ShieldCheck,
@@ -113,6 +116,7 @@ export default function HarnessPanel(): React.JSX.Element {
         }
         const lock = parseSkillsLock(lockText)
         setData({
+          plugins: buildHarnessPluginRows(discovery?.skills ?? []),
           skills: buildHarnessSkillRows(discovery?.skills ?? [], lock, worktreePath),
           mcp: inspections
             .filter((inspection) => inspection.exists)
@@ -164,7 +168,11 @@ export default function HarnessPanel(): React.JSX.Element {
             {t('koder.harness.title', 'Harness')}
           </p>
           <p className="truncate font-mono text-[11px] text-muted-foreground">
-            {t('koder.harness.counts', 'Skills {skills} · MCP {mcp} · Lock {lock}')
+            {t(
+              'koder.harness.counts',
+              'Skills {skills} · MCP {mcp} · Plugins {plugins} · Lock {lock}'
+            )
+              .replace('{plugins}', String(data.plugins.length))
               .replace('{skills}', String(projectSkills.length))
               .replace('{mcp}', String(data.mcp.length))
               // Why always a fraction: "—" reads as "no data", but zero pinned out of
@@ -185,6 +193,37 @@ export default function HarnessPanel(): React.JSX.Element {
       {error ? <p className="px-3 py-2 text-[11px] text-rose-400">{error}</p> : null}
 
       <div className="scrollbar-sleek min-h-0 flex-1 overflow-y-auto">
+        {/* Plugins first: they are the thing that installs skills, so reading
+            them after the skills they shipped inverts cause and effect. */}
+        <Section label={t('koder.harness.plugins', 'Plugins')} count={data.plugins.length}>
+          {data.plugins.length === 0 ? (
+            <p className="px-3 py-1.5 text-[11px] text-muted-foreground/60 italic">
+              {t('koder.harness.noPlugins', 'Ningún plugin aporta skills a este proyecto.')}
+            </p>
+          ) : (
+            data.plugins.map((plugin) => (
+              <div key={plugin.label} className="flex items-start gap-2 px-3 py-1.5">
+                <Puzzle
+                  className={cn(
+                    'mt-0.5 size-3.5 shrink-0',
+                    plugin.anyInstalled ? 'text-emerald-500' : 'text-muted-foreground'
+                  )}
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-[12px] text-foreground">{plugin.label}</p>
+                  <p className="truncate font-mono text-[10px] text-muted-foreground">
+                    {`${plugin.skillCount} skills`}
+                    {plugin.providers.length > 0 ? ` · ${plugin.providers.join(', ')}` : ''}
+                    {plugin.anyInstalled
+                      ? ''
+                      : ` · ${t('koder.harness.pluginNotInstalled', 'sin instalar')}`}
+                  </p>
+                </div>
+              </div>
+            ))
+          )}
+        </Section>
+
         <Section
           label={t('koder.harness.skills', 'Skills del proyecto')}
           count={projectSkills.length}
