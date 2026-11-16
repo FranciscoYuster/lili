@@ -12,7 +12,7 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { RefreshCw, ShieldCheck, ShieldAlert, ShieldX, Server, Puzzle } from 'lucide-react'
+import { RefreshCw, ShieldCheck, ShieldAlert, ShieldX, Server, Puzzle, Wand2 } from 'lucide-react'
 import { useAppStore } from '@/store'
 import { useTranslate } from '@/i18n/use-translate'
 import { joinPath } from '@/lib/path'
@@ -36,6 +36,8 @@ import {
   type HarnessSkillStatus
 } from './harness-lock'
 import { buildHarnessPluginRows, type HarnessPluginRow } from './harness-plugins'
+import { HarnessGeneratorDialog } from './HarnessGeneratorDialog'
+import { basename } from '@/lib/path'
 
 type McpRow = McpServerSummary & { configLabel: string }
 
@@ -74,6 +76,7 @@ export default function HarnessPanel(): React.JSX.Element {
   const [data, setData] = useState<HarnessData>(EMPTY_DATA)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [generatorOpen, setGeneratorOpen] = useState(false)
   const requestRef = useRef(0)
 
   const fileContext = useMemo((): RuntimeFileOperationArgs | null => {
@@ -180,6 +183,17 @@ export default function HarnessPanel(): React.JSX.Element {
               .replace('{lock}', `${lockedCount}/${projectSkills.length}`)}
           </p>
         </div>
+        {/* Creating the harness belongs next to reading it: the panel that says
+            a project has no skills-lock is where you decide to give it one. */}
+        <button
+          type="button"
+          className="rounded p-1 text-muted-foreground/70 transition-colors hover:text-foreground disabled:opacity-40"
+          disabled={!fileContext}
+          onClick={() => setGeneratorOpen(true)}
+          aria-label={t('koder.harness.generate.open', 'Crear el harness')}
+        >
+          <Wand2 className="size-3.5" />
+        </button>
         <button
           type="button"
           className="rounded p-1 text-muted-foreground/70 transition-colors hover:text-foreground"
@@ -301,6 +315,17 @@ export default function HarnessPanel(): React.JSX.Element {
             )
           : t('koder.harness.noLock', 'Este proyecto no tiene skills-lock.json: nada está fijado.')}
       </p>
+
+      {fileContext ? (
+        <HarnessGeneratorDialog
+          open={generatorOpen}
+          onOpenChange={setGeneratorOpen}
+          context={fileContext}
+          worktreePath={worktreePath}
+          defaultProjectName={basename(worktreePath)}
+          onWritten={() => void load(true)}
+        />
+      ) : null}
     </div>
   )
 }
