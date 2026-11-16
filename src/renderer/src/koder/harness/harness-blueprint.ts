@@ -37,6 +37,10 @@ export type HarnessInputs = {
   /** Free text, e.g. "Next.js 16 · MongoDB · Vercel". */
   stack: string
   mcp: HarnessMcpInput[]
+  /** `plugin@marketplace` references this project should enable. */
+  plugins: string[]
+  /** Marketplaces the repository itself should declare, as `owner/repo`. */
+  marketplaces: { name: string; repo: string }[]
 }
 
 export const HARNESS_AGENTS_FILE = 'AGENTS.md'

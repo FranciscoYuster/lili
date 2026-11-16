@@ -24,6 +24,7 @@ import { loadMcpConfigInspections } from '@/runtime/mcp/configuration/mcp-config
 import { readRuntimeFileContent } from '@/runtime/files/reads/runtime-file-read-client'
 import type { RuntimeFileOperationArgs } from '@/runtime/files/runtime-file-client-types'
 import type { McpServerSummary } from '../../../../shared/mcp-config'
+import type { DiscoveredSkill } from '../../../../shared/skills'
 import {
   buildHarnessSkillRows,
   countGlobalSkills,
@@ -46,11 +47,19 @@ type HarnessData = {
   plugins: HarnessPluginRow[]
   /** Every installed skill, project and global; the panel splits them for display. */
   skills: HarnessSkillRow[]
+  /** The raw discovery, kept so the generator can name plugins without re-reading. */
+  discovered: DiscoveredSkill[]
   mcp: McpRow[]
   hasLock: boolean
 }
 
-const EMPTY_DATA: HarnessData = { plugins: [], skills: [], mcp: [], hasLock: false }
+const EMPTY_DATA: HarnessData = {
+  plugins: [],
+  skills: [],
+  discovered: [],
+  mcp: [],
+  hasLock: false
+}
 
 const STATUS_ICON: Record<HarnessSkillStatus, typeof ShieldCheck> = {
   locked: ShieldCheck,
@@ -121,6 +130,7 @@ export default function HarnessPanel(): React.JSX.Element {
         setData({
           plugins: buildHarnessPluginRows(discovery?.skills ?? []),
           skills: buildHarnessSkillRows(discovery?.skills ?? [], lock, worktreePath),
+          discovered: discovery?.skills ?? [],
           mcp: inspections
             .filter((inspection) => inspection.exists)
             .flatMap((inspection) =>
@@ -323,6 +333,7 @@ export default function HarnessPanel(): React.JSX.Element {
           context={fileContext}
           worktreePath={worktreePath}
           defaultProjectName={basename(worktreePath)}
+          skills={data.discovered}
           onWritten={() => void load(true)}
         />
       ) : null}

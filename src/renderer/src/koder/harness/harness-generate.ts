@@ -24,6 +24,7 @@ import {
   HARNESS_MCP_FILE,
   HARNESS_SKILLS_README
 } from './harness-blueprint'
+import { PROJECT_SETTINGS_FILE } from './harness-project-plugins'
 import {
   requiredHarnessDirectories,
   writableHarnessRows,
@@ -37,7 +38,8 @@ export const HARNESS_PLAN_FILES = [
   HARNESS_CLAUDE_FILE,
   HARNESS_SKILLS_README,
   HARNESS_DESIGN_FILE,
-  HARNESS_MCP_FILE
+  HARNESS_MCP_FILE,
+  PROJECT_SETTINGS_FILE
 ] as const
 
 type ReadTarget = { target: RuntimeFileOperationArgs['target']; worktreeId: string | null }

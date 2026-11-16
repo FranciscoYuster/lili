@@ -30,6 +30,13 @@ import {
   type HarnessInputs,
   type HarnessMcpInput
 } from './harness-blueprint'
+import {
+  marketplacesToDeclare,
+  mergeProjectSettings,
+  pluginsToAdd,
+  PROJECT_SETTINGS_FILE,
+  readProjectPlugins
+} from './harness-project-plugins'
 
 export type HarnessPlanAction = 'create' | 'merge' | 'keep' | 'conflict'
 
@@ -43,6 +50,9 @@ export type HarnessPlanReason =
   | 'serversTaken'
   | 'unparseable'
   | 'nothingRequested'
+  | 'pluginsAdded'
+  | 'pluginsAlreadyEnabled'
+  | 'marketplaceCollision'
 
 export type HarnessPlanRow = {
   relativePath: string
@@ -69,7 +79,8 @@ export function buildHarnessPlan(
     claudeRow(read(HARNESS_CLAUDE_FILE)),
     simpleRow(HARNESS_SKILLS_README, read(HARNESS_SKILLS_README), buildSkillsReadme),
     simpleRow(HARNESS_DESIGN_FILE, read(HARNESS_DESIGN_FILE), () => buildDesignDoc(inputs)),
-    mcpRow(read(HARNESS_MCP_FILE), inputs.mcp)
+    mcpRow(read(HARNESS_MCP_FILE), inputs.mcp),
+    pluginsRow(read(PROJECT_SETTINGS_FILE), inputs)
   ]
 }
 
@@ -159,6 +170,66 @@ function mcpRow(existing: string | null, requested: readonly HarnessMcpInput[]):
     content: mergeMcpConfig(parsed.root, parsed.servers, free),
     reason: 'serversAdded',
     detail: free.map((server) => server.name)
+  }
+}
+
+/**
+ * The project's plugin configuration: which marketplaces the repository
+ * declares and which plugins it enables, in one write.
+ *
+ * Additive only, and a marketplace name the file already points somewhere else
+ * is a conflict rather than a rewrite: repointing a name silently redirects
+ * every plugin installed under it.
+ */
+function pluginsRow(
+  existing: string | null,
+  inputs: Pick<HarnessInputs, 'plugins' | 'marketplaces'>
+): HarnessPlanRow {
+  if (inputs.plugins.length === 0 && inputs.marketplaces.length === 0) {
+    return {
+      relativePath: PROJECT_SETTINGS_FILE,
+      action: 'keep',
+      content: null,
+      reason: 'nothingRequested'
+    }
+  }
+  const state = readProjectPlugins(existing)
+  if (!state.readable) {
+    // Same refusal as .mcp.json: rewriting settings we cannot parse would drop
+    // permissions, hooks and whatever else the team put in that file.
+    return {
+      relativePath: PROJECT_SETTINGS_FILE,
+      action: 'conflict',
+      content: null,
+      reason: 'unparseable'
+    }
+  }
+  const marketplaces = marketplacesToDeclare(state, inputs.marketplaces)
+  if (marketplaces.collisions.length > 0) {
+    return {
+      relativePath: PROJECT_SETTINGS_FILE,
+      action: 'conflict',
+      content: null,
+      reason: 'marketplaceCollision',
+      detail: marketplaces.collisions
+    }
+  }
+  const plugins = pluginsToAdd(state, inputs.plugins)
+  if (plugins.length === 0 && marketplaces.add.length === 0) {
+    return {
+      relativePath: PROJECT_SETTINGS_FILE,
+      action: 'keep',
+      content: null,
+      reason: 'pluginsAlreadyEnabled',
+      detail: [...inputs.plugins]
+    }
+  }
+  return {
+    relativePath: PROJECT_SETTINGS_FILE,
+    action: state.exists ? 'merge' : 'create',
+    content: mergeProjectSettings(existing, { plugins, marketplaces: marketplaces.add }),
+    reason: state.exists ? 'pluginsAdded' : 'absent',
+    detail: [...plugins, ...marketplaces.add.map((entry) => `${entry.name} (${entry.repo})`)]
   }
 }
 

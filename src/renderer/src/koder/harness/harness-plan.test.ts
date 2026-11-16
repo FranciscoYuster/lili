@@ -29,6 +29,8 @@ const inputs = (over: Partial<HarnessInputs> = {}): HarnessInputs => ({
   summary: 'Internal operations for Koder.',
   stack: 'Next.js 16 · MongoDB',
   mcp: [mongo],
+  plugins: [],
+  marketplaces: [],
   ...over
 })
 
@@ -44,15 +46,16 @@ const absent: ExistingHarnessFile[] = []
 
 describe('buildHarnessPlan on an empty project', () => {
   it('creates every file', () => {
-    const plan = buildHarnessPlan(inputs(), absent)
-    expect(plan.map((entry) => entry.action)).toEqual([
+    const plan2 = buildHarnessPlan(inputs({ plugins: ['task-router@koderspa'] }), absent)
+    expect(plan2.map((entry) => entry.action)).toEqual([
+      'create',
       'create',
       'create',
       'create',
       'create',
       'create'
     ])
-    expect(countHarnessWrites(plan)).toBe(5)
+    expect(countHarnessWrites(plan2)).toBe(6)
   })
 
   it('writes CLAUDE.md as the import and nothing else', () => {
@@ -186,8 +189,8 @@ describe('buildMcpConfig', () => {
 
 describe('requiredHarnessDirectories', () => {
   it('ignores root-level files and returns each parent once, shallowest first', () => {
-    const plan = buildHarnessPlan(inputs(), absent)
-    expect(requiredHarnessDirectories(plan)).toEqual(['.agents/skills', 'docs/design'])
+    const plan = buildHarnessPlan(inputs({ plugins: ['task-router@koderspa'] }), absent)
+    expect(requiredHarnessDirectories(plan)).toEqual(['.claude', '.agents/skills', 'docs/design'])
   })
 
   it('skips rows that write nothing', () => {

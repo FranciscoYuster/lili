@@ -39,7 +39,19 @@ export function reasonLabel(t: Translate, row: HarnessPlanRow): string {
       'koder.harness.generate.reasonUnparseable',
       'no es JSON válido: no se toca para no perder lo que tenga'
     ),
-    nothingRequested: t('koder.harness.generate.reasonNothingRequested', 'sin servidores pedidos')
+    nothingRequested: t(
+      'koder.harness.generate.reasonNothingRequested',
+      'nada pedido para este archivo'
+    ),
+    pluginsAdded: t('koder.harness.generate.reasonPluginsAdded', 'se habilitan: {detail}'),
+    pluginsAlreadyEnabled: t(
+      'koder.harness.generate.reasonPluginsAlreadyEnabled',
+      'el proyecto ya los habilita: {detail}'
+    ),
+    marketplaceCollision: t(
+      'koder.harness.generate.reasonMarketplaceCollision',
+      'ese nombre ya apunta a otra fuente: {detail}. Repuntarlo redirige todo lo instalado bajo él.'
+    )
   }
   return reasons[row.reason].replace('{detail}', detail)
 }

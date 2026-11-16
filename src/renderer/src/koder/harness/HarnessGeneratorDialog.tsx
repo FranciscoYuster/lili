@@ -16,7 +16,7 @@
  */
 
 import { useCallback, useId, useMemo, useState } from 'react'
-import { LoaderCircle, Plus, Trash2 } from 'lucide-react'
+import { LoaderCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -33,13 +33,15 @@ import type { RuntimeFileOperationArgs } from '@/runtime/files/runtime-file-clie
 import { buildHarnessPlan, countHarnessWrites, type HarnessPlanRow } from './harness-plan'
 import { applyHarnessPlan, readExistingHarness, type HarnessWriteResult } from './harness-generate'
 import {
-  blankDraft,
   mongoDbDraft,
   toMcpInput,
   validateMcpDraft,
   type HarnessMcpDraft
 } from './harness-mcp-draft'
 import { Field, PlanRow } from './harness-generator-parts'
+import { McpSection, PluginsSection } from './harness-generator-sections'
+import { installedPluginRows } from './harness-plugin-identity'
+import { isMarketplaceRepo, pluginInstallCommands } from './harness-project-plugins'
 import { actionLabel, reasonLabel } from './harness-generator-labels'
 
 type Phase = 'form' | 'plan' | 'done'
@@ -51,6 +53,13 @@ export type HarnessGeneratorDialogProps = {
   worktreePath: string
   /** Repository folder name, used as the default project name. */
   defaultProjectName: string
+  /** The skills the panel already discovered; the plugin list is derived from them. */
+  skills: readonly {
+    sourceKind: string
+    sourceLabel: string
+    rootPath: string
+    installed: boolean
+  }[]
   /** Called after a write so the panel can re-read what it now shows. */
   onWritten: () => void
 }
@@ -61,6 +70,7 @@ export function HarnessGeneratorDialog({
   context,
   worktreePath,
   defaultProjectName,
+  skills,
   onWritten
 }: HarnessGeneratorDialogProps): React.JSX.Element {
   const t = useTranslate()
@@ -72,6 +82,8 @@ export function HarnessGeneratorDialog({
   const [summary, setSummary] = useState('')
   const [stack, setStack] = useState('')
   const [drafts, setDrafts] = useState<HarnessMcpDraft[]>([mongoDbDraft('mcp-1')])
+  const [selectedPlugins, setSelectedPlugins] = useState<Set<string>>(new Set())
+  const [marketplaceRepos, setMarketplaceRepos] = useState<Record<string, string>>({})
   const [plan, setPlan] = useState<HarnessPlanRow[]>([])
   const [result, setResult] = useState<HarnessWriteResult | null>(null)
 
@@ -79,7 +91,25 @@ export function HarnessGeneratorDialog({
     () => new Map(drafts.map((draft) => [draft.id, validateMcpDraft(draft)])),
     [drafts]
   )
-  const formValid = [...draftErrors.values()].every((errors) => errors.length === 0)
+  const availablePlugins = useMemo(() => installedPluginRows(skills), [skills])
+  // A repo typed and then mistyped must block the plan, or the generator would
+  // silently drop the declaration and write only enabledPlugins.
+  const reposValid = Object.values(marketplaceRepos).every(
+    (repo) => repo.trim() === '' || isMarketplaceRepo(repo)
+  )
+  const formValid = reposValid && [...draftErrors.values()].every((errors) => errors.length === 0)
+
+  const togglePlugin = useCallback((reference: string) => {
+    setSelectedPlugins((current) => {
+      const next = new Set(current)
+      if (next.has(reference)) {
+        next.delete(reference)
+      } else {
+        next.add(reference)
+      }
+      return next
+    })
+  }, [])
 
   const patch = useCallback((id: string, change: Partial<HarnessMcpDraft>) => {
     setDrafts((current) =>
@@ -96,7 +126,19 @@ export function HarnessGeneratorDialog({
         worktreePath
       )
       setPlan(
-        buildHarnessPlan({ projectName, summary, stack, mcp: drafts.map(toMcpInput) }, existing)
+        buildHarnessPlan(
+          {
+            projectName,
+            summary,
+            stack,
+            mcp: drafts.map(toMcpInput),
+            plugins: [...selectedPlugins],
+            marketplaces: Object.entries(marketplaceRepos)
+              .filter(([, repo]) => isMarketplaceRepo(repo))
+              .map(([name, repo]) => ({ name, repo: repo.trim() }))
+          },
+          existing
+        )
       )
       setPhase('plan')
     } catch (caught) {
@@ -104,7 +146,16 @@ export function HarnessGeneratorDialog({
     } finally {
       setBusy(false)
     }
-  }, [context, drafts, projectName, stack, summary, worktreePath])
+  }, [
+    context,
+    drafts,
+    marketplaceRepos,
+    projectName,
+    selectedPlugins,
+    stack,
+    summary,
+    worktreePath
+  ])
 
   const write = useCallback(async () => {
     setBusy(true)
@@ -122,6 +173,10 @@ export function HarnessGeneratorDialog({
   }, [context, onWritten, plan, worktreePath])
 
   const writeCount = countHarnessWrites(plan)
+  const installCommands = useMemo(
+    () => pluginInstallCommands([...selectedPlugins]),
+    [selectedPlugins]
+  )
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -169,97 +224,26 @@ export function HarnessGeneratorDialog({
               onChange={setStack}
             />
 
-            <div className="space-y-2 border-t border-border/60 pt-3">
-              <p className="text-[11px] font-medium text-foreground">
-                {t('koder.harness.generate.mcp', 'MCP del proyecto (.mcp.json)')}
-              </p>
-              <p className="text-[10px] text-muted-foreground/70">
-                {t(
-                  'koder.harness.generate.mcpHint',
-                  'Pide el NOMBRE de la variable de entorno, nunca el valor: el archivo se commitea y escribe ${NOMBRE}.'
-                )}
-              </p>
-              {drafts.map((draft) => {
-                const errors = draftErrors.get(draft.id) ?? []
-                return (
-                  <div key={draft.id} className="space-y-2 rounded border border-border/60 p-2">
-                    <div className="grid grid-cols-2 gap-2">
-                      <Field
-                        id={`${fieldId}-${draft.id}-name`}
-                        label={t('koder.harness.generate.serverName', 'Servidor')}
-                        value={draft.name}
-                        onChange={(value) => patch(draft.id, { name: value })}
-                        invalid={errors.includes('nameRequired') || errors.includes('nameInvalid')}
-                      />
-                      <Field
-                        id={`${fieldId}-${draft.id}-command`}
-                        label={t('koder.harness.generate.command', 'Comando')}
-                        value={draft.command}
-                        onChange={(value) => patch(draft.id, { command: value })}
-                        invalid={errors.includes('commandRequired')}
-                      />
-                    </div>
-                    <Field
-                      id={`${fieldId}-${draft.id}-args`}
-                      label={t('koder.harness.generate.args', 'Argumentos')}
-                      value={draft.args}
-                      onChange={(value) => patch(draft.id, { args: value })}
-                    />
-                    <div className="grid grid-cols-2 gap-2">
-                      <Field
-                        id={`${fieldId}-${draft.id}-key`}
-                        label={t('koder.harness.generate.envKey', 'Variable que espera el MCP')}
-                        value={draft.envKey}
-                        onChange={(value) => patch(draft.id, { envKey: value })}
-                        invalid={errors.includes('envKeyRequired')}
-                      />
-                      <Field
-                        id={`${fieldId}-${draft.id}-var`}
-                        label={t('koder.harness.generate.envVar', 'Variable del proyecto (nombre)')}
-                        placeholder="MONGODB_URI"
-                        value={draft.envVar}
-                        onChange={(value) => patch(draft.id, { envVar: value })}
-                        invalid={
-                          errors.includes('envVarRequired') ||
-                          errors.includes('envVarInvalid') ||
-                          errors.includes('envVarLooksLikeSecret')
-                        }
-                      />
-                    </div>
-                    {errors.includes('envVarLooksLikeSecret') ? (
-                      <p className="text-[10px] text-rose-400">
-                        {t(
-                          'koder.harness.generate.secretRefused',
-                          'Eso parece el valor, no el nombre. Este archivo se commitea: escribe el nombre de la variable.'
-                        )}
-                      </p>
-                    ) : null}
-                    {drafts.length > 1 ? (
-                      <button
-                        type="button"
-                        className="flex items-center gap-1 text-[10px] text-muted-foreground hover:text-rose-400"
-                        onClick={() =>
-                          setDrafts((current) => current.filter((entry) => entry.id !== draft.id))
-                        }
-                      >
-                        <Trash2 className="size-3" />
-                        {t('koder.harness.generate.removeServer', 'Quitar')}
-                      </button>
-                    ) : null}
-                  </div>
-                )
-              })}
-              <button
-                type="button"
-                className="flex items-center gap-1 text-[11px] text-muted-foreground hover:text-foreground"
-                onClick={() =>
-                  setDrafts((current) => [...current, blankDraft(`mcp-${current.length + 1}`)])
-                }
-              >
-                <Plus className="size-3" />
-                {t('koder.harness.generate.addServer', 'Agregar servidor')}
-              </button>
-            </div>
+            <McpSection
+              t={t}
+              fieldId={fieldId}
+              drafts={drafts}
+              errorsFor={(id) => draftErrors.get(id) ?? []}
+              onPatch={patch}
+              onChange={setDrafts}
+            />
+
+            <PluginsSection
+              t={t}
+              fieldId={fieldId}
+              available={availablePlugins}
+              selected={selectedPlugins}
+              repos={marketplaceRepos}
+              onToggle={togglePlugin}
+              onRepo={(marketplace, repo) =>
+                setMarketplaceRepos((current) => ({ ...current, [marketplace]: repo }))
+              }
+            />
           </div>
         ) : null}
 
@@ -296,6 +280,21 @@ export function HarnessGeneratorDialog({
                 {result.written.map((path) => (
                   <p key={path} className="font-mono text-[11px] text-muted-foreground">
                     {path}
+                  </p>
+                ))}
+              </div>
+            ) : null}
+            {installCommands.length > 0 ? (
+              <div className="rounded border border-amber-500/40 p-2">
+                <p className="text-[11px] text-amber-500">
+                  {t(
+                    'koder.harness.generate.installStill',
+                    'Habilitar no instala. En cada clon falta correr:'
+                  )}
+                </p>
+                {installCommands.map((command) => (
+                  <p key={command} className="font-mono text-[11px] text-foreground">
+                    {command}
                   </p>
                 ))}
               </div>
