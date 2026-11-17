@@ -712,7 +712,7 @@ module.exports = {
     ],
     // Keep local artifacts aligned with the release pipeline.
     target: ['AppImage', 'deb', 'rpm'],
-    maintainer: 'stablyai',
+    maintainer: 'Koder SpA',
     category: 'Utility'
   },
   appImage: {
@@ -763,8 +763,10 @@ module.exports = {
   npmRebuild: true,
   publish: {
     provider: 'github',
-    owner: 'stablyai',
-    repo: devChannelRepo ?? 'orca',
+    // 信心 is a fork. Pointing the feed at the upstream repo makes every build
+    // announce upstream's releases and, on accept, replace 信心 with Orca.
+    owner: 'FranciscoYuster',
+    repo: devChannelRepo ?? 'lili',
     // Keep main-repo releases draft until release-cut verifies all assets; early --publish always would expose missing Windows installers.
     releaseType: devChannelRepo ? 'prerelease' : 'draft'
   }
